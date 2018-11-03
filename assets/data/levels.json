@@ -1,0 +1,41 @@
+{
+  "levels": [
+    {
+      "score": 0,
+      "maxJumps": 1,
+      "canDash": false,
+      "canRoll": false,
+    },
+    {
+      "score": 10,
+      "maxJumps": 1,
+      "canDash": false,
+      "canRoll": false,
+    },
+    {
+      "score": 50,
+      "maxJumps": 1,
+      "canDash": false,
+      "canRoll": false,
+    },
+    {
+      "score": 0,
+      "maxJumps": 1,
+      "canDash": false,
+      "canRoll": false,
+    },
+    {
+      "score": 0,
+      "maxJumps": 1,
+      "canDash": false,
+      "canRoll": false,
+    },
+    {
+      "score": 0,
+      "maxJumps": 1,
+      "canDash": false,
+      "canRoll": false,
+    }
+
+  ]
+}

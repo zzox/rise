@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "description": "rise!",
   "main": "src/main.js",
+  "repository": "https://github.com/zzox/rise",
   "scripts": {
     "start": "webpack",
     "deploy": "webpack --config webpack.production.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "zzox",
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.25.0",

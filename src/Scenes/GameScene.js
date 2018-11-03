@@ -1,5 +1,5 @@
 import Player from '../Player/Player'
-// import Pest from '../Enemies/Pest'
+import Pest from '../Enemies/Pest'
 // import Opponent from '../Enemies/Opponent'
 // import Bullet from '../ForeignObjects/Bullet'
 
@@ -19,9 +19,11 @@ export default class GameScene extends Phaser.Scene {
     //probably wont change
     this.hudHeight = 30
 
-    this.cameraTimer = 1
+    // 6 * 16.7 === 100.6
+    this.cameraTimer = 106
     this.cameraTime = 0
     this.cameraNudge = 1
+    this.cameraDelay = 5000
   }
 
   preload(){
@@ -29,6 +31,8 @@ export default class GameScene extends Phaser.Scene {
     this.stage = this.scene.settings.data.stage
     console.log(this.scene)
     console.log(this.stage)
+
+    this.controls = this.scene.settings.data.controls
 
     // this.GameState = this.scene.settings.data.state
     // console.log(this.GameState)
@@ -45,10 +49,10 @@ export default class GameScene extends Phaser.Scene {
     console.log(this.enemiesNum)
     
     // this.screenOffset = { x: 0, y: 0 }
-    // this.gameConfig = this.sys.cache.json.entries.entries.stages[this.stage]
+    this.stageConfig = this.sys.cache.json.entries.entries.stages[this.stage]
     this.animsConfig = this.sys.cache.json.entries.entries.animations
     // this.dialogConfig = this.sys.cache.json.entries.entries.dialog
-    // this.pestConfig = this.sys.cache.json.entries.entries.pests
+    this.pestConfig = this.sys.cache.json.entries.entries.pests
     // this.opponentConfig = this.sys.cache.json.entries.entries.opponents
 
     // this.dialogLine = 0
@@ -89,16 +93,16 @@ export default class GameScene extends Phaser.Scene {
     //   })
     // }
 
-    // this.pests = this.gameConfig.content.pests
-    // if(this.pests) {
-    //   this.pests.map(enemy => {
-    //     if(!this.animsArray.includes(enemy.name)){
-    //                                                                                       // make this come from the enemy object
-    //       this.animsArray.push(enemy.name)
-    //       this.load.spritesheet(enemy.name, `assets/characters/enemies/${enemy.name}.png`, { frameWidth: 16, frameHeight: 8, spacing: 2, margin: 1 })
-    //     }
-    //   })
-    // }
+    this.pests = this.stageConfig.pests
+    if(this.pests) {
+      this.pests.map(enemy => {
+        if(!this.animsArray.includes(enemy.name)){
+                                                                                          // make this come from the enemy object
+          this.animsArray.push(enemy.name)
+          this.load.spritesheet(enemy.name, `assets/characters/enemies/${enemy.name}.png`, { frameWidth: 16, frameHeight: 8, spacing: 2, margin: 1 })
+        }
+      })
+    }
 
     // this.opponents = this.gameConfig.content.opponents
     // console.log(this.opponents)
@@ -166,7 +170,7 @@ export default class GameScene extends Phaser.Scene {
         this.contactTileSet = this.map.addTilesetImage('desert', 'desert')
         console.log(this.contactTileSet)
         // this.contactLayer = this.map.createDynamicLayer('contactLayer', this.contactTileSet, 0 + this.screenOffset.x, 0/* + this.hudHeight + this.screenOffset.y*/)
-        this.contactLayer = this.map.createDynamicLayer('contactLayer', this.contactTileSet, 0, 0)
+        this.contactLayer = this.map.createDynamicLayer('contactLayer', this.contactTileSet, 0, 0 + this.hudHeight)
         this.contactLayer.setCollisionByProperty({ collide: true })
         // this.contactLayer.filterTiles(item => {
         //   if(item.properties.collideDown === true){
@@ -274,31 +278,32 @@ export default class GameScene extends Phaser.Scene {
     //     this.bubbleGroup.push(bubble)
     //   })
     // }
-    // this.pestGroup = this.add.group()
+    this.pestGroup = this.add.group()
 
-    // if(this.pests){
-    //     // console.log(this.worldConfig.content)
-    //   this.pests.map(enemy => {
-    //     // console.log('enemy')
-    //     // console.log(enemy)
-    //     // console.log('enemyConfig')
-    //     // console.log(this.enemyConfig)
-    //     let pos = enemy.position.split('x')
-    //     console.log(pos)
-    //     console.log(this.pestConfig[enemy.name])
-    //     this.pestGroup.add(new Pest({
-    //       scene: this,
-    //       key: 'sprites16',
-    //       x: Number(pos[0]) * 16 + this.screenOffset.x + 8,
-    //       y: Number(pos[1]) * 16 + this.screenOffset.y,
-    //       name: enemy.name,
-    //       details: this.pestConfig[enemy.name]
-    //     })) 
-    //   })
-    //   console.log('enemies here')
-    //   this.physics.add.collider(this.contactLayer, this.pestGroup)
-    // }
+    if(this.pests){
+        // console.log(this.worldConfig.content)
+      this.pests.map(enemy => {
+        // console.log('enemy')
+        // console.log(enemy)
+        // console.log('enemyConfig')
+        // console.log(this.enemyConfig)
+        let pos = enemy.position.split('x')
+        console.log(pos)
+        console.log(this.pestConfig[enemy.name])
+        this.pestGroup.add(new Pest({
+          scene: this,
+          key: 'sprites16',
+          x: Number(pos[0]) * 16 + 8,
+          y: Number(pos[1]) * 16,
+          name: enemy.name,
+          details: this.pestConfig[enemy.name]
+        })) 
+      })
+      console.log('enemies here')
+      this.physics.add.collider(this.contactLayer, this.pestGroup)
+    }
 
+    this.physics.add.overlap(this.player, this.pestGroup, this.player.hurtByEnemy)
     // this.opponentGroup = this.add.group()
 
     // if(this.opponents){
@@ -332,17 +337,22 @@ export default class GameScene extends Phaser.Scene {
 
     // console.log(this)
 
-    // this.physics.add.overlap(this.player, this.pestGroup, this.player.hurtByEnemy)
 
     console.log('this.cameras.main')
     console.log(this.cameras.main)
 
     this.cameras.main.fadeIn(500)
       .startFollow(this.player)
-      .setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels) // <- may need to change with long and narrow or high amd skinny
+      .setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels + this.hudHeight) // <- may need to change with long and narrow or high amd skinny
       .setBackgroundColor('#80e5ff')
       .stopFollow()
       // .setLerp(.8, .8)
+
+    if(this.controls === 'arrows'){
+
+    } else {
+
+    } 
 
     this.keys = {
       up: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
@@ -352,7 +362,10 @@ export default class GameScene extends Phaser.Scene {
       jump: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
       melee: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
       shoot: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
-      pause: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C)
+      bomb: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E),
+      dash: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+      item: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q)
+      // pause: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C)
     }
 
     // if(this.gameConfig.offsetNeeded){
@@ -488,25 +501,25 @@ export default class GameScene extends Phaser.Scene {
       return
     }
 
-    if(this.keys.pause.isDown && this.prevState.pause === false){
-      // console.log(this.player.x + " " + this.player.y)
-      // console.log(this.cameras.main)
-      this.prevState.pause = true
-      console.log("pausing")
-      this.scene.launch('PauseMenuScene')
-      this.scene.pause()
-      return
-    }
+    // if(this.keys.pause.isDown && this.prevState.pause === false){
+    //   // console.log(this.player.x + " " + this.player.y)
+    //   // console.log(this.cameras.main)
+    //   this.prevState.pause = true
+    //   console.log("pausing")
+    //   this.scene.launch('PauseMenuScene')
+    //   this.scene.pause()
+    //   return
+    // }
 
     this.player.update(this.keys, time, delta)
 
     // console.log(this.player.y + ' ' + (this.cameras.main.scrollY + 270))
 
-    if(this.player.y > this.cameras.main.scrollY + 270){
+    if(this.player.y > this.cameras.main.scrollY + 270 + 30){
       console.log('die')
     }
 
-    // this.pestGroup.children.entries.map(pest => pest.update(time, delta))
+    this.pestGroup.children.entries.map(pest => pest.update(time, delta))
     // this.opponentGroup.children.entries.map(opponent => opponent.update(time, delta))
     // this.bullets.children.entries.map(bullet => bullet.update(time, delta))
     // Array.from(this.fireballs.children.entries).forEach(
@@ -598,18 +611,26 @@ export default class GameScene extends Phaser.Scene {
     //   }, 3000)
     // }
 
-    this.cameraTime += delta
+    if(this.cameraDelay === 0){
+      this.cameraTime += delta
 
-    if (this.cameraTime > this.cameraTimer) {
-      let wv = this.cameras.main.worldView.x
+      if (this.cameraTime > this.cameraTimer) {
+        let wv = this.cameras.main.worldView.x
 
-      this.cameras.main.scrollY -= this.cameraNudge
+        this.cameras.main.scrollY -= this.cameraNudge
 
-      this.cameraTime = 0
+        this.cameraTime = 0
+      }
+    } else {
+      this.cameraDelay -= delta
+      if(this.cameraDelay < 0){
+        this.cameraDelay = 0
+      }
     }
 
-    this.prevState.pause = this.keys.pause.isDown
-    this.prevState.up = this.keys.up.isDown
+
+    // this.prevState.pause = this.keys.pause.isDown
+    // this.prevState.up = this.keys.up.isDown
   }
 
   createAnimations(){

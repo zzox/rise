@@ -70,8 +70,8 @@ export default class BootScene extends Phaser.Scene {
 
       let el = document.getElementsByTagName('canvas')[0];
       // console.log(el);
-      el.style.width = "1440px"
-      el.style.height = "810px"
+      el.style.width = "960px"
+      el.style.height = "540px"
       this.scene.start('TitleScene')
      // this.scene.start('OverworldScene', {town: 'humblock', mapName: 'slobs-room', freshRun: true})
   }

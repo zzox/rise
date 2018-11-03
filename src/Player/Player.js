@@ -53,15 +53,29 @@ export default class Player extends Phaser.GameObjects.Sprite {
       key: 'melee'
     })
 
+    // dash
+    this.canDash = false
+    this.dashing = false
+    this.dashWarming = false
+    this.dashTime = 0
+    this.dashTimer = 250
+    this.dashVeloctiy = 500
+    this.maxVelocityTimer = 0
+
+    // hurt
     this.hurt = false
     this.hurtTimer = 500
     this.hurtTime = 0
     this.tintStep = 0
 
+    // proj
     this.ammo = 6
     this.firePerSec = 1
     this.lastFired = 0
     this.projFrequency = 1000 / this.firePerSec
+
+    // no grav proj
+
 
     this.prevState = {}
 
@@ -69,6 +83,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   update(keys, time, delta) {
+
+    // console.log(' x')
+    // console.log(this.x + ' ' + this.y)
+
     // if (!this.scene){
     //   return
     // }
@@ -99,17 +117,19 @@ export default class Player extends Phaser.GameObjects.Sprite {
       down: keys.down.isDown,
       jump: keys.jump.isDown,
       melee: keys.melee.isDown,
-      shoot: keys.shoot.isDown
+      shoot: keys.shoot.isDown,
+      dash: keys.dash.isDown
     }
 
-    // Clear holds
+    // holds
     let holds = {
       left: keys.left.timeDown,
       right: keys.right.timeDown,
       up: keys.up.timeDown,
       down: keys.down.timeDown,
       jump: keys.jump.timeDown,
-      shoot: keys.shoot.timeDown
+      shoot: keys.shoot.timeDown,
+      dash: keys.dash.timeDown
     }
 
     // if(this.scene.exitLayer && input.up && !this.exiting){
@@ -172,6 +192,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     if (this.body.velocity.y !== 0 && !this.jumping) {
       this.isFalling = true
+      this.jumpTimer = 0
+      this.jumps++
     }
 
     if (input.jump) {
@@ -219,10 +241,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
     //   }
     // }
 
-
+    //wall logic
     if(this.body.blocked.left && !this.body.blocked.down && input.left ||
       this.body.blocked.right && !this.body.blocked.down && input.right) {
-      console.log('wallSlow')
       if(this.body.velocity.y > 0) {
         this.body.setVelocityY(this.wallSlow)
       }
@@ -234,6 +255,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
     }
 
+    //hurt logic
     if(this.hurt){
       if(this.hurtTime > this.hurtTimer){
         this.hurt = false
@@ -244,7 +266,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
     }
     
-
     if(this.hurt){
       // dont know how this works but it does
       this.tintStep = (this.tintStep === 5) ? 0 : this.tintStep + 1
@@ -255,6 +276,38 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
     }
 
+    //dash logic
+    if(input.dash && !this.prevState.dash && this.canDash){
+      this.dashWarming = true
+      this.body.allowGravity = false
+    }
+
+    if(this.dashWarming){
+      if(this.dashTime > this.dashTimer || this.prevState.dash && !input.dash){
+        console.log('dashing')
+        this.dash(this.flipX, this.dashTime, this.dashTimer)
+      } else {
+        this.body.setVelocity(0)
+        this.dashTime += delta
+      }
+    }
+
+    if(this.maxVelocityTimer > 0){
+      this.maxVelocityTimer -= delta
+    } 
+
+    //end dash
+    if(this.maxVelocityTimer <= 0){
+      this.maxVelocityTimer = 0
+      this.dashing = false
+
+      //possibly helps with timing?
+      if(this.body.maxVelocity.x !== 150){
+        this.body.maxVelocity.x = 150
+        this.body.allowGravity = true
+        this.body.setVelocityX(0)
+      }
+    }
 
     //Animation Logic
     if(this.body.velocity.x === 0){
@@ -279,6 +332,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
       this.prevState.flipX = this.flipX
       this.prevState.jump = input.jump
+      this.prevState.dash = input.dash
     // }
   }
 
@@ -365,6 +419,27 @@ export default class Player extends Phaser.GameObjects.Sprite {
     if (player.health <= 0) {
       player.die()
     }
+  }
+
+  dash (dir, dashTime, dashTimer) {
+    console.log('trying to dash')
+    this.dashTime = 0
+    this.dashWarming = false
+    dir = dir ? 1 : -1
+
+    console.log(dir * (dashTime / dashTimer) * this.dashVeloctiy)
+
+    this.body.maxVelocity.x = 400
+    this.maxVelocityTimer = 150
+    this.dashing = true
+
+    this.body.setVelocityX(dir * (dashTime / dashTimer) * this.dashVeloctiy)
+  }
+
+  cancelDash () {
+    this.dashTime = 0
+    this.dashWarming = false
+    this.body.allowGravity = true
   }
 
   damage(damage){

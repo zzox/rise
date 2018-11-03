@@ -10,19 +10,20 @@ const config = {
   parent: 'content',
   width: 480,
   height: 270,
-  pixelArt: true,
-  roundPixels: true,
+  // pixelArt: true,
+  // roundPixels: true,
   physics: {
     default: 'arcade',
     arcade: {
       gravity: {y: 800},
-      debug: true
+      // debug: true
     }
   },
   scene: [
     BootScene,
     TitleScene,
     GameScene
+    // IntroScene
     // IntermediateScene,
     // PauseMenuScene
   ]
