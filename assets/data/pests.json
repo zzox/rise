@@ -1,0 +1,18 @@
+{
+	"snake": {
+		"speed": 125,
+		"attackSpeed": 150,
+		"stillDamage": 5,
+		"attackDamage": 20,
+		"decisionTime": 1000,
+		"health": 20
+	},
+	"spider": {
+		"speed": 0,
+		"attackSpeed": 165,
+		"stillDamage": 5,
+		"attackDamage": 20,
+		"decisionTime": 750,
+		"health": 20
+	}
+}

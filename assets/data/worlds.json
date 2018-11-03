@@ -1,0 +1,372 @@
+{
+  "forest":{
+  },
+  "cliffley":{
+  },
+  "humblock": {
+    "humblock1":{
+      "leftNeighbor": "Forest-Forest10",
+      "rightNeighbor": "humblock2"
+    },
+    "humblock2":{
+      "leftNeighbor": "humblock1",
+      "rightNeighbor": "humblock3"
+    },
+    "humblock3":{
+      "leftNeighbor": "humblock2",
+      "rightNeighbor": "humblock4"
+    },
+    "humblock4":{
+      "leftNeighbor": "humblock3",
+      "rightNeighbor": "humblock5"
+    },
+    "humblock5":{
+      "fresh": {
+        "x":50,  
+        "y":50
+      },
+      "content":{
+        "tilesets":[
+          "ext", "house"
+        ],
+        "layers":[
+          "ext-groundLayer", "house-houseLayer", "house-exitLayer"
+        ],
+        "pests":[
+          {
+            "name": "snake",
+            "level": 1,
+            "position": "10x10"
+          },
+          {
+            "name": "snake",
+            "level": 1,
+            "position": "50x10"
+          },
+          {
+            "name": "snake",
+            "level": 1,
+            "position": "110x20"
+          },
+          {
+            "name": "snake",
+            "level": 1,
+            "position": "140x30"
+          },
+          {
+            "name": "snake",
+            "level": 1,
+            "position": "180x38"
+          }
+        ]
+      },
+      "exitLayer":true,
+      "contactLayer": true,
+      "nearground": false,
+      "bgTileset": false,
+      "leftNeighbor": "humblock4",
+      "rightNeighbor": "humblock6",
+      "bgColor": "80e5ff",
+      "fromInside":{
+        "shack-main":"8x12"
+      },
+      "exits":{
+        "8x12":{
+          "mapName":"shack-main",
+          "from":"left"
+        }
+      }
+    },
+    "shack-main":{
+      "fresh": {
+        "x":150,  
+        "y":72
+      },
+      "content":{
+        "tilesets":[
+          "int"
+        ],
+        "layers":[
+          "int-background"
+        ],
+        "npc":[
+          {
+            "name": "sean",
+            "position": "8x4"
+          }   
+        ],
+        "enemies":[]
+      },
+      "nearground": true,
+      "leftNeighbor":"humblock5",
+      "leftToOutside": true,
+      "leftExit": {"x":2, "y":2},
+      "rightNeighbor":"shack-backyard",
+      "rightToOutside": true,
+      "rightExit": {"x":2, "y":2},
+      "bgColor": "000000",
+      "bgTileset":false,
+      "bgRect": "0xf9f8b8",
+      "collideWB": true,
+      "offsetNeeded": true,
+      "size": {
+        "x":320,
+        "y":80
+      }
+    },
+    "shack-backyard":{
+      "fresh": {
+        "x":50,  
+        "y":50
+      },
+      "content":{
+        "tilesets":[
+          "ext", "house"
+        ],
+        "layers":[
+          "ext-groundLayer", "house-houseLayer", "house-exitLayer"
+        ],
+        "pests":[
+          {
+            "name": "spider",
+            "level": 1,
+            "position": "10x10"
+          },
+          {
+            "name": "spider",
+            "level": 1,
+            "position": "50x10"
+          },
+          {
+            "name": "spider",
+            "level": 1,
+            "position": "110x20"
+          },
+          {
+            "name": "spider",
+            "level": 1,
+            "position": "140x30"
+          },
+          {
+            "name": "spider",
+            "level": 1,
+            "position": "180x38"
+          }
+        ]
+      },
+      "exitLayer":true,
+      "contactLayer": true,
+      "nearground": false,
+      "bgTileset": false,
+      "leftNeighbor": "",
+      "rightNeighbor": "",
+      "bgColor": "80e5ff",
+      "fromInside":{
+        "shack-main":"8x12"
+      },
+      "exits":{
+        "8x12":{
+          "mapName":"shack-main",
+          "from":"right"
+        }
+      }
+    },
+    "humblock6":{
+      "fresh": {
+        "x":50,  
+        "y":272
+      },
+      "content":{
+        "tilesets":[
+          "ext", "house"
+        ],
+        "layers":[
+          "ext-groundLayer", "house-houseLayer", "house-exitLayer"
+        ],
+        "enemies":[]
+      },
+      "exitLayer":true,
+      "contactLayer": true,
+      "nearground": false,
+      "bgTileset": false,
+      "leftNeighbor": "humblock5",
+      "rightNeighbor": "humblock7",
+      "bgColor": "80e5ff",
+      "fromInside":{
+        "fulton-main":"171x34",
+        "twins-main":"19x37"
+      },
+      "exits":{
+        "171x34":{
+          "mapName":"fulton-main",
+          "from":"left"
+        },
+        "19x37":{
+          "mapName":"twins-main",
+          "from":"left"
+        }
+      }
+    },
+    "twins-main":{
+      "content":{
+        "tilesets":[
+          "int"
+        ],
+        "layers":[
+          "int-background", "int-exitLayer"
+        ],
+        "npc":[
+          {
+            "name": "twinM",
+            "position": "15x11"
+          },
+          {
+            "name": "twinF",
+            "position": "11x11"
+          }      
+        ],
+        "enemies":[]
+      },
+      "nearground":true,
+      "leftNeighbor":"humblock6",
+      "leftToOutside": true,
+      "bgColor": "000000",
+      "bgRect": "f9f8b8",
+      "fromInside":{
+        "moms-room":"19x11",
+        "slobs-room":"26x11"
+      },
+      "exits":{
+        "19x11":{
+          "mapName":"twinMs-rooms",
+          "from":"left"
+        },
+        "26x11":{
+          "mapName":"twinFs-room",
+          "from":"left"
+        }
+      },
+      "exitLayer":true,
+      "bgTileset":false,
+      "collideWB": true,
+      "offsetNeeded": true,
+      "size": {
+        "x":480,
+        "y":192
+      }
+    },
+    "slobs-room":{
+      "fresh": {
+        "x":150,  
+        "y":72
+      },
+      "content":{
+        "tilesets":[
+          "int"
+        ],
+        "layers":[
+          "int-background"
+        ],
+        "enemies":[]
+      },
+      "nearground":true,
+      "leftNeighbor":"fulton-main",
+      "leftToOutside": true,
+      "leftExit": {"x":200, "y":50},
+      "bgColor": "000000",
+      "bgTileset": false,
+      "bgRect": "0xf9f8b8",
+      "collideWB": true,
+      "offsetNeeded": true,
+      "size": {
+        "x":320,
+        "y":80
+      }
+    },
+    "fulton-main":{
+      "content":{
+        "tilesets":[
+          "int"
+        ],
+        "layers":[
+          "int-background", "int-exitLayer"
+        ],
+        "npc":[
+          {
+            "name": "mom",
+            "position": "11x11"
+          }
+        ],
+        "enemies":[]
+      },
+      "nearground":true,
+      "leftNeighbor":"humblock6",
+      "leftToOutside": true,
+      "bgColor": "000000",
+      "bgRect": "f9f8b8",
+      "fromInside":{
+        "moms-room":"19x11",
+        "slobs-room":"26x11"
+      },
+      "exits":{
+        "19x11":{
+          "mapName":"moms-room",
+          "from":"left"
+        },
+        "26x11":{
+          "mapName":"slobs-room",
+          "from":"left"
+        }
+      },
+      "exitLayer":true,
+      "bgTileset":false,
+      "collideWB": true,
+      "offsetNeeded": true,
+      "size": {
+        "x":480,
+        "y":192
+      }
+    },
+    "moms-room":{
+      "content":{
+        "tilesets":[
+          "int"
+        ],
+        "layers":[
+          "int-background"
+        ],
+        "enemies":[]
+      },
+      "nearground":true,
+      "leftNeighbor":"fulton-main",
+      "leftToOutside": true,
+      "leftExit": {"x":200, "y":50},
+      "bgColor": "000000",
+      "bgRect": "f9f8b8",
+      "bgTileset":false,
+      "collideWB": true,
+      "offsetNeeded": true,
+      "size": {
+        "x":320,
+        "y":80
+      }
+    },
+    "humblock7":{
+      "content":{
+        "tilesets":[
+          "ext"
+        ],
+        "layers":[
+          "ext-groundLayer"
+        ],
+        "enemies":[]
+      },      
+      "contactLayer": true,
+      "nearground": false,
+      "bgTileset": false,
+      "leftNeighbor": "humblock6",
+      "rightNeighbor": "",
+      "bgColor": "80e5ff"
+    }
+  }
+}

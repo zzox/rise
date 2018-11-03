@@ -1,0 +1,15 @@
+{
+	"jock": {
+		"speed": 200,
+		"attackSpeed": 150,
+		"stillDamage": 5,
+		"attackDamage": 20,
+		"decisionTime": 250,
+		"jumpVelocity": 150,
+		"maxVelocityX": 125,
+		"health": 100,
+		"hasSword": true,
+		"hasGun": true,
+		"maxJumps": 2
+	}
+}

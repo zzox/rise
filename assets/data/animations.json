@@ -1,0 +1,140 @@
+{
+  "slob": {
+    "sheet": "slob-p",
+    "anims": [
+      {
+        "key": "run",
+        "frames": {"start": 0, "end": 5},
+        "frameRate": 10
+      },
+      {
+        "key": "stand",
+        "frames": {"start": 6, "end": 6}
+      },
+      {
+        "key": "jump",
+        "frames": {"start": 3, "end": 3}
+      },
+      {
+        "key": "slide-vert",
+        "frames": {"start": 7, "end": 7}
+      }
+    ]
+  },
+  "selectorBounce":{
+    "sheet": "selectorBounce",
+    "anims": [
+      {
+        "key": "bounce",
+        "frames": {"start": 0, "end": 1},
+        "frameRate": 2
+      }
+    ]
+  },
+  "mom": {
+    "sheet": "mom",
+    "anims": [
+      {
+        "key": "mom-idle",
+        "frames": {"start": 0, "end": 1},
+        "frameRate": 2
+      }
+    ]
+  },
+  "twinF": {
+    "sheet": "twinF",
+    "anims": [
+      {
+        "key": "twinF-idle",
+        "frames": {"start": 0, "end": 1},
+        "frameRate": 2
+      }
+    ]
+  },
+  "twinM": {
+    "sheet": "twinM",
+    "anims": [
+      {
+        "key": "twinM-idle",
+        "frames": {"start": 0, "end": 1},
+        "frameRate": 2
+      }
+    ]
+  },
+  "sean": {
+    "sheet": "sean",
+    "anims": [
+      {
+        "key": "sean-idle",
+        "frames": {"start": 0, "end": 1},
+        "frameRate": 2
+      }
+    ]
+  },
+  "jock": {
+    "sheet": "jock",
+    "anims": [
+      {
+        "key": "jock-idle",
+        "frames": {"start": 0, "end": 1},
+        "frameRate": 2
+      }
+    ]
+  },
+  "snake": {
+    "sheet": "snake",
+    "anims": [
+      {
+        "key": "snake-moving",
+        "frames": {"start": 0, "end": 1},
+        "frameRate": 5
+      },
+      {
+        "key": "snake-attacking",
+        "frames": {"start": 2, "end": 2}
+      }
+    ]
+  },
+  "spider": {
+    "sheet": "spider",
+    "anims": [
+      {
+        "key": "spider-moving",
+        "frames": {"start": 0, "end": 1},
+        "frameRate": 5
+      },
+      {
+        "key": "spider-attacking",
+        "frames": {"start": 2, "end": 2}
+      }
+    ]
+  },
+  "aluminumBat": {
+    "sheet": "aluminumBat",
+    "anims": [
+      {
+        "key": "up",
+        "frames": {"start": 0, "end": 0}
+      },
+      {
+        "key": "swing",
+        "frames": {"start": 1, "end": 1}
+      },
+      {
+        "key": "down",
+        "frames": {"start": 2, "end": 2}
+      }
+    ]
+  },
+  "bullet": {
+    "sheet": "bullet",
+    "anims": [
+      {
+        "key": "bullet-active",
+        "frames": {"start": 0, "end": 2},
+        "frameRate": 10
+      }
+    ]
+  }
+
+}
