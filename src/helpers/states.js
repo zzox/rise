@@ -21,3 +21,17 @@ export const markers = [
 		}
 	}
 ]
+
+// stage 1 colors
+
+// 10 * 160 increments
+
+// 80e5ff
+// 74cae0
+// 6ecbd3
+// 6ec4cc
+// 6ab3ba
+// 6abab6
+// 66afac
+// 6cb5b1
+// 7cc1ba

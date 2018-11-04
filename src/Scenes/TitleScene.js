@@ -29,7 +29,7 @@ export default class TitleScene extends Phaser.Scene {
       downKey: false      
     }
 
-    this.startKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+    this.startKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
     this.upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP)
     this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
 

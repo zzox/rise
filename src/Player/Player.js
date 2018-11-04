@@ -54,7 +54,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     })
 
     // dash
-    this.canDash = false
+    this.canDash = true
     this.dashing = false
     this.dashWarming = false
     this.dashTime = 0
@@ -394,6 +394,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
   hurtByEnemy(player, enemy) {
     let damage
+    let lrDir = player.x >= enemy.x ? 1 : -1
 
     if (enemy.hurt || player.hurt) return
 
@@ -403,14 +404,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
       damage = enemy.stillDamage
     }
 
-    let lrDir = player.x >= enemy.x ? 1 : -1
-
     if (enemy.alive) {
       if(player.body.blocked.down && player.body.velocity.y === 0){
         console.log('setting velocity:' + (damage * lrDir * 100))
         player.body.setVelocityX(damage * lrDir * 100)  
       } else {
-        player.body.setVelocity(damage * 100 * lrDir, damage * 20 * -1)  
+        player.body.setVelocity(damage * 100 * lrDir, damage * -10)  
       }
       player.health = player.health - damage
       player.hurt = true
