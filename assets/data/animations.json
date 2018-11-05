@@ -18,6 +18,18 @@
       {
         "key": "slide-vert",
         "frames": {"start": 7, "end": 7}
+      },
+      {
+        "key": "swing-up",
+        "frames": {"start": 8, "end": 8}
+      },
+      {
+        "key": "swing-down",
+        "frames": {"start": 9, "end": 9}
+      },
+      {
+        "key": "swing-run",
+        "frames": {"start": 10, "end": 15}
       }
     ]
   },

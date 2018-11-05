@@ -4,7 +4,22 @@
       {
         "name": "snake",
         "level": 1,
-        "position": "2x89.5"
+        "position": "2x29.5"
+      },
+      {
+        "name": "snake",
+        "level": 1,
+        "position": "18x23.5"
+      },
+      {
+        "name": "spider",
+        "level": 1,
+        "position": "15x21.5"
+      },
+      {
+        "name": "spider",
+        "level": 1,
+        "position": "21x21.5"
       }
     ],
     "nearground": false,

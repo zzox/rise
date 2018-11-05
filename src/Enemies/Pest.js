@@ -7,7 +7,7 @@ export default class Pest extends Phaser.GameObjects.Sprite {
     // start still and wait until needed
                                                 //SLOBLEM: setting to true causes weird blips
     this.body.setVelocity(0, 0).setBounce(0, 0)// .setCollideWorldBounds(true)
-    this.body.allowGravity = true
+    this.body.allowGravity = true // needed now?
     this.beenSeen = false
     // know about player
     this.player = this.scene.player
@@ -57,7 +57,8 @@ export default class Pest extends Phaser.GameObjects.Sprite {
                                             //TEMP
       if(this.y - 8 > this.scene.cameras.main.scrollY){
         this.beenSeen = true;
-        alert('seen')
+        console.log('seen')
+        // alert('seen')
         // this.body.velocity.x = this.direction;
         this.body.allowGravity = true
         // this.body.setCollideWorldBounds(true)
@@ -65,7 +66,8 @@ export default class Pest extends Phaser.GameObjects.Sprite {
       }
       return false
     }
-    return true;
+    return true // to activate
+    // return false
   }
 
   update (time, delta) {

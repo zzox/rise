@@ -19,11 +19,7 @@ export default class GameScene extends Phaser.Scene {
     //probably wont change
     this.hudHeight = 30
 
-    // 6 * 16.7 === 100.6
-    this.cameraTimer = 106
-    this.cameraTime = 0
-    this.cameraNudge = 1
-    this.cameraDelay = 5000
+
   }
 
   preload(){
@@ -43,7 +39,6 @@ export default class GameScene extends Phaser.Scene {
     // this.enemiesNum = level.enemiesNum
     // this.playerHasGun = level.playerData.gun
     // this.playerHasSword = level.playerData.sword
-    // this.playerMaxJumps = level.playerData.maxJumps
 
     console.log(this.name)
     console.log(this.enemiesNum)
@@ -53,6 +48,7 @@ export default class GameScene extends Phaser.Scene {
     this.animsConfig = this.sys.cache.json.entries.entries.animations
     // this.dialogConfig = this.sys.cache.json.entries.entries.dialog
     this.pestConfig = this.sys.cache.json.entries.entries.pests
+    this.weaponsConfig = this.sys.cache.json.entries.entries.weapons
     // this.opponentConfig = this.sys.cache.json.entries.entries.opponents
 
     // this.dialogLine = 0
@@ -120,7 +116,7 @@ export default class GameScene extends Phaser.Scene {
 
 
 
-    this.load.spritesheet('slob-p', 'assets/characters/player/slob-p.png', { frameWidth: 16, frameHeight: 16, spacing:2, margin:1})
+    this.load.spritesheet('slob-p', 'assets/characters/player/slob.png', { frameWidth: 16, frameHeight: 16, spacing:2, margin:1})
     // this.load.tilemapTiledJSON(this.mapName, `assets/tilemaps/${this.town}/${this.mapName}.json`)
 
     console.log('here???')
@@ -130,6 +126,15 @@ export default class GameScene extends Phaser.Scene {
     this.load.spritesheet('aluminumBat', 'assets/weapons/aluminumBat.png', { frameWidth: 16, frameHeight: 16, spacing:2, margin:1})
     this.load.spritesheet('bullet', 'assets/weapons/bullet.png', { frameWidth: 8, frameHeight: 8/*, spacing:2, margin:1*/})
     this.load.spritesheet('selectorBounce', 'assets/menu/selectorBounce.png', { frameWidth: 16, frameHeight: 16, spacing:2, margin:1})
+
+
+    // 6 * 16.7 === 100.6
+    this.cameraTimer = 25
+    this.cameraTime = 0
+    // this.cameraNudge = 0
+    this.cameraNudge = 1
+    this.cameraDelay = 5000
+    this.cameraIncrement = 0
   }
 
   create(){
@@ -234,8 +239,11 @@ export default class GameScene extends Phaser.Scene {
     //   }
     // }
 
+    this.playerMaxJumps = 1
+    this.playerMaxDashes = 1
+
     playerX = 16 * 2.5
-    playerY = 16 * 118
+    playerY = 16 * 60
 
     this.player = new Player({
       scene: this,
@@ -244,7 +252,8 @@ export default class GameScene extends Phaser.Scene {
       y: playerY,
       hasGun: this.playerHasGun,
       HasSword: this.playerHasSword,
-      maxJumps: this.playerMaxJumps
+      maxJumps: this.playerMaxJumps,
+      maxDashes: this.playerMaxDashes
     })
     this.player.create()
     this.player.flipX = true // for now
@@ -516,7 +525,7 @@ export default class GameScene extends Phaser.Scene {
     // console.log(this.player.y + ' ' + (this.cameras.main.scrollY + 270))
 
     if(this.player.y > this.cameras.main.scrollY + 270 + 30){
-      console.log('die')
+      // console.log('die')
     }
 
     this.pestGroup.children.entries.map(pest => pest.update(time, delta))
@@ -618,8 +627,22 @@ export default class GameScene extends Phaser.Scene {
         let wv = this.cameras.main.worldView.x
 
         this.cameras.main.scrollY -= this.cameraNudge
+        this.cameraIncrement++
+        // console.log(this.cameraIncrement)
 
         this.cameraTime = 0
+
+        if(this.cameraIncrement === 360){
+          console.log('heyyyy')
+          console.log('heyyyy')
+          console.log('heyyyy')
+          console.log('heyyyy')
+          console.log('heyyyy')
+          console.log('heyyyy')
+          console.log('heyyyy')
+          console.log('heyyyy')
+          this.cameraTimer = 25
+        }
       }
     } else {
       this.cameraDelay -= delta

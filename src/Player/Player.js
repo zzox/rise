@@ -3,7 +3,7 @@ import Melee from '../GameObjects/Melee'
 export default class Player extends Phaser.GameObjects.Sprite {
 
   constructor(config) {
-    super(config.scene, config.x, config.y, config.key, config.hasGun, config.hasSword, config.maxJumps)
+    super(config.scene, config.x, config.y, config.key, config.hasGun, config.hasSword, config.maxJumps, config.maxDashes)
     config.scene.physics.world.enable(this)
     config.scene.add.existing(this)
 
@@ -12,6 +12,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.hasSword = config.hasSword
     this.hasGun = config.hasGun
     this.maxJumps = config.maxJumps
+    this.maxDashes = config.maxDashes
   }
 
   create(){
@@ -48,9 +49,18 @@ export default class Player extends Phaser.GameObjects.Sprite {
     // this.swingHold = 0
     // this.swingingDir = ''
 
+    this.weapon = 'aluminumBat'
+
+    let config = this.scene.weaponsConfig[this.weapon]
+
     this.meleeWeapon = new Melee({
       scene: this.scene,
-      key: 'melee'
+      key: 'melee',
+      swingStart: config.swingStart,
+      swingLow: config.swingLow,
+      swingHigh: config.swingHigh,
+      damage: config.damage,
+      blowback: config.blowback
     })
 
     // dash
@@ -61,6 +71,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.dashTimer = 250
     this.dashVeloctiy = 500
     this.maxVelocityTimer = 0
+    this.dashes = 0
 
     // hurt
     this.hurt = false
@@ -80,6 +91,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.prevState = {}
 
     this.wallSlow = 50
+    // this.wallSlowing = false
   }
 
   update(keys, time, delta) {
@@ -168,7 +180,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     // SLOBLEM: hurtTime
     if(this.hurtTime <= 0 || this.hurtTime > 250){
       if ((this.body.blocked.down && !input.left && !input.right) 
-        || (this.meleeWeapon.swingHold > 0 && this.meleeWeapon.swingHold < 150) && this.body.blocked.down) {
+        || (this.meleeWeapon.swingHold > 0 && this.meleeWeapon.swingHold < this.meleeWeapon.swingHigh) && this.body.blocked.down) {
         this.run(0)
       } else {
         this.run(vel)
@@ -225,7 +237,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     //proj logic
     // if(input.shoot && this.hasGun && (time > this.lastFired || this.lastFired === 0) && 
-    //   !(this.meleeWeapon.swingHold > 0 && this.meleeWeapon.swingHold < 200 || this.meleeWeapon.swinging)) {
+    //   !(this.meleeWeapon.swingHold > 0 && this.meleeWeapon.swingHold < this.meleeWeapon.swingHigh || this.meleeWeapon.swinging)) {
     //   // console.log(this.scene.projectiles)
     //   let bullet = this.scene.bullets.get()
     //   // console.log(bullet)
@@ -277,7 +289,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
 
     //dash logic
-    if(input.dash && !this.prevState.dash && this.canDash){
+    if(input.dash && !this.prevState.dash && this.canDash && this.dashes < this.maxDashes){
+      this.dashes++
       this.dashWarming = true
       this.body.allowGravity = false
     }
@@ -309,6 +322,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
     }
 
+    if (this.dashes !== 0 && this.body.blocked.down) {
+      this.dashes = 0
+    }
+
     //Animation Logic
     if(this.body.velocity.x === 0){
       this.animation = 'stand'
@@ -318,6 +335,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     if(!this.body.blocked.down){
       this.animation = 'jump'
+    }
+
+    if(this.meleeWeapon.swingingDir){
+      if(this.meleeWeapon.swingingDir === 'up')
+        this.animation = 'swing-up'
+      if(this.meleeWeapon.swingingDir === 'down')
+        this.animation = 'swing-down'
     }
 
     // console.log(this.animation)
