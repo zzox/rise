@@ -28,8 +28,17 @@
         "frames": {"start": 9, "end": 9}
       },
       {
+        "key": "swing-stand",
+        "frames": {"start": 10, "end": 10}
+      },
+      {
+        "key": "swing-jump",
+        "frames": {"start": 13, "end": 13}
+      },
+      {
         "key": "swing-run",
-        "frames": {"start": 10, "end": 15}
+        "frames": {"start": 10, "end": 15},
+        "frameRate": 10
       }
     ]
   },

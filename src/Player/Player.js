@@ -96,6 +96,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
   update(keys, time, delta) {
 
+    // console.log(this.x + ' ' + this.y)
     // console.log(' x')
     // console.log(this.x + ' ' + this.y)
 
@@ -229,9 +230,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
 
     //Melee Logic
-    if(input.melee){
+    if(input.melee && !this.prevState.melee){
       this.meleeWeapon.swing(true)
-    } else {
+    } 
+
+    if (!input.melee) {
       this.meleeWeapon.swing(false)
     }
 
@@ -344,6 +347,22 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.animation = 'swing-down'
     }
 
+    if (!this.meleeWeapon.swingingDir && this.meleeWeapon.swinging) {
+      if(this.body.velocity.x !== 0){
+        this.animation = 'swing-run'
+      }
+
+      if(this.body.velocity.y !== 0) {
+        this.animation = 'swing-jump'
+      }
+
+      if (this.body.velocity.x === 0 && this.body.velocity.y === 0) {
+        this.animation = 'swing-stand'
+      }
+
+      console.log(this.animation)
+    }
+
     // console.log(this.animation)
     // console.log(this.anims.currentAnim.key)
     // console.log(this.anims)
@@ -356,6 +375,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
       this.prevState.flipX = this.flipX
       this.prevState.jump = input.jump
+      this.prevState.melee = input.melee
       this.prevState.dash = input.dash
     // }
   }

@@ -27,21 +27,29 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 	}
 
 	swing(bool){
-		this.swinging = bool
-		if(!bool && this.swingHold > 0 && this.swingHold < this.swingHigh){
+		// keep swing if letting go
+		if(this.swinging && this.swingHold < this.swingHigh){
 			this.swinging = true
+			return
 		}
+		this.swinging = bool
 	}
 
-	cancelSwing() {
-		console.log('cancelingSwing')
-		this.swinging = false
-		this.swingHold = 0
+	cancelSwing(weapon, tile) {
+		// console.log(tile.canCollide)
+		// console.log(weapon.swingHold + ' ' + weapon.swingHigh)
+		if(tile.canCollide && weapon.swingHold > weapon.swingHigh){
+			console.log('canceling swing')
+			weapon.swinging = false
+			weapon.swingHold = 0
+			weapon.visible = false
+		}
 	}
 
 	update(time, delta, x, y, dir){
 		if(this.swinging) this.swingHold += delta
-		if(!this.swinging) {
+		// stop swing if letting go
+		if(!this.swinging && this.swingHold > this.swingHigh) {
 			this.visible = false
 			this.swingHold = 0
 			return
@@ -59,7 +67,7 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 				this.x = x + 4
 				this.flipX = true		
 			}
-			this.y = y - 16
+			this.y = y - 15
 			this.anims.play('up', true)
 			this.swingingDir = 'up'
 			//overlap
@@ -82,7 +90,7 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 				this.x = x + 14
 				this.flipX = true
 			}
-			this.y = y
+			this.y = y - 2
 			this.anims.play('swing', true)
 			this.swingingDir = 'down'
 			//overlap
@@ -103,7 +111,7 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 				this.x = x + 14
 				this.flipX = true
 			}
-			this.y = y
+			this.y = y - 2
 			this.anims.play('down', true)
 			this.swingingDir = null
 			//overlap
@@ -119,6 +127,10 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 	}
 
 	hurtEnemy (weapon, enemy) {
+		if(!weapon.active || !weapon.visible) {
+			alert('not active or visible')
+			return
+		}
 		if(enemy.hurt === false && enemy.alive === true){
 			enemy.damage(weapon.damage)
 		}
@@ -134,9 +146,18 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 		} else {
 			enemy.body.setVelocity(weapon.blowback * dir, weapon.blowback * -1)	
 		}
+
+		//cant keep a swing if holding
+		if(!weapon.swingingDir) {
+			weapon.cancelSwing(weapon, {canCollide: true})
+		}
 	}
 
 	hurtPlayer (weapon, player) {
+		if(!weapon.active || !weapon.visible) {
+			alert('not active or visible')
+			return
+		}
 		if(player.hurt === false && player.alive === true){
 			player.damage(weapon.damage)
 		}
@@ -153,5 +174,11 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 		} else {
 			player.body.setVelocity(weapon.blowback * dir, weapon.blowback * -1)	
 		}
+
+		//cant keep a swing if holding
+		if(!weapon.swingingDir) {
+			weapon.cancelSwing(weapon, {canCollide: true})
+		}
+
 	}
 }

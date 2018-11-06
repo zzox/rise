@@ -1,5 +1,6 @@
 import Player from '../Player/Player'
 import Pest from '../Enemies/Pest'
+import Text from '../OtherObjects/Text'
 // import Opponent from '../Enemies/Opponent'
 // import Bullet from '../ForeignObjects/Bullet'
 
@@ -18,8 +19,6 @@ export default class GameScene extends Phaser.Scene {
 
     //probably wont change
     this.hudHeight = 30
-
-
   }
 
   preload(){
@@ -51,10 +50,10 @@ export default class GameScene extends Phaser.Scene {
     this.weaponsConfig = this.sys.cache.json.entries.entries.weapons
     // this.opponentConfig = this.sys.cache.json.entries.entries.opponents
 
-    // this.dialogLine = 0
-    // this.dialogPos = 0
-    // this.dialogOpen = false
-    // this.dialogHalt = 2
+    this.dialogLine = 0
+    this.dialogPos = 0
+    this.dialogOpen = false
+    this.dialogHalt = 2
 
     this.windowDimensions = {x: this.sys.game.config.width, y: this.sys.game.config.height - this.hudHeight}
     // if(this.worldConfig.offsetNeeded){
@@ -113,15 +112,11 @@ export default class GameScene extends Phaser.Scene {
     //   })
     // }    
 
-
-
-
     this.load.spritesheet('slob-p', 'assets/characters/player/slob.png', { frameWidth: 16, frameHeight: 16, spacing:2, margin:1})
     // this.load.tilemapTiledJSON(this.mapName, `assets/tilemaps/${this.town}/${this.mapName}.json`)
 
-    console.log('here???')
-    console.log(this.load.spritesheet('desert', `assets/tilesets/${this.stage}.png`, { frameWidth: 16, frameHeight: 16, spacing: 2, margin: 1 }))
-    console.log(this.load.tilemapTiledJSON('desert', `assets/tilemaps/${this.stage}.json`))
+    this.load.spritesheet(`${this.stage}-tiles`, `assets/tilesets/${this.stage}.png`, { frameWidth: 16, frameHeight: 16, spacing: 2, margin: 1 })
+    this.load.tilemapTiledJSON(this.stage, `assets/tilemaps/${this.stage}.json`)
 
     this.load.spritesheet('aluminumBat', 'assets/weapons/aluminumBat.png', { frameWidth: 16, frameHeight: 16, spacing:2, margin:1})
     this.load.spritesheet('bullet', 'assets/weapons/bullet.png', { frameWidth: 8, frameHeight: 8/*, spacing:2, margin:1*/})
@@ -131,9 +126,9 @@ export default class GameScene extends Phaser.Scene {
     // 6 * 16.7 === 100.6
     this.cameraTimer = 25
     this.cameraTime = 0
-    // this.cameraNudge = 0
+    this.cameraNudge = 0
     this.cameraNudge = 1
-    this.cameraDelay = 5000
+    this.cameraDelay = 7000
     this.cameraIncrement = 0
   }
 
@@ -158,7 +153,7 @@ export default class GameScene extends Phaser.Scene {
     // }
 
     this.map = this.make.tilemap({
-      key: 'desert'
+      key: this.stage
     })
 
     console.log('this.map')
@@ -172,7 +167,7 @@ export default class GameScene extends Phaser.Scene {
 
     // for (let i = layers.length - 1; i >= 0; i--) {
     //   if(layers[i] === 'contactLayer'){
-        this.contactTileSet = this.map.addTilesetImage('desert', 'desert')
+        this.contactTileSet = this.map.addTilesetImage(this.stage, `${this.stage}-tiles`)
         console.log(this.contactTileSet)
         // this.contactLayer = this.map.createDynamicLayer('contactLayer', this.contactTileSet, 0 + this.screenOffset.x, 0/* + this.hudHeight + this.screenOffset.y*/)
         this.contactLayer = this.map.createDynamicLayer('contactLayer', this.contactTileSet, 0, 0 + this.hudHeight)
@@ -203,6 +198,25 @@ export default class GameScene extends Phaser.Scene {
     //   this.anims.remove('stand')
     //   this.anims.remove('jump')
     // }
+
+    this.textGroup = []
+    let text = this.stageConfig.text
+
+    text.map(item => {
+      let it = new Text(
+        this, 
+        item.color, 
+        item.text, 
+        item.position,
+        item.scrollPosition,
+        item.fadeTime,
+        item.fadesOut
+      )
+
+      this.textGroup.push(it)
+
+      it.create()
+    })
 
     this.createAnimations()
     this.animsMade = true
@@ -620,6 +634,8 @@ export default class GameScene extends Phaser.Scene {
     //   }, 3000)
     // }
 
+    this.textGroup.map(text => text.update(delta, this.cameras.main.scrollY))
+
     if(this.cameraDelay === 0){
       this.cameraTime += delta
 
@@ -633,14 +649,6 @@ export default class GameScene extends Phaser.Scene {
         this.cameraTime = 0
 
         if(this.cameraIncrement === 360){
-          console.log('heyyyy')
-          console.log('heyyyy')
-          console.log('heyyyy')
-          console.log('heyyyy')
-          console.log('heyyyy')
-          console.log('heyyyy')
-          console.log('heyyyy')
-          console.log('heyyyy')
           this.cameraTimer = 25
         }
       }
@@ -660,7 +668,7 @@ export default class GameScene extends Phaser.Scene {
     if(this.anims.anims)
       this.anims.anims.clear()
 
-    if(this.npc) this.anims.create({key: 'bounce', frames: this.anims.generateFrameNumbers('speechBubble', { start: 0, end: 11 }), frameRate: 4, repeat: -1, repeatDelay: 0 })
+    // if(this.npc) this.anims.create({key: 'bounce', frames: this.anims.generateFrameNumbers('speechBubble', { start: 0, end: 11 }), frameRate: 4, repeat: -1, repeatDelay: 0 })
 
     console.log(this.animsArray)
 

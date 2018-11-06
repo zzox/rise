@@ -22,6 +22,16 @@
         "position": "21x21.5"
       }
     ],
+    "text": [
+      {
+        "color": "0x000000",
+        "text": "It's too hot",
+        "position": {"x": 80, "y": 880},
+        "scrollPosition": 900,
+        "fadeTime": 75,
+        "fadesOut": true
+      }
+    ],
     "nearground": false,
     "bgTileset": false,
     "bgColor": "80e5ff"
