@@ -134,15 +134,15 @@
     "sheet": "aluminumBat",
     "anims": [
       {
-        "key": "up",
+        "key": "aluminumBat-up",
         "frames": {"start": 0, "end": 0}
       },
       {
-        "key": "swing",
+        "key": "aluminumBat-swing",
         "frames": {"start": 1, "end": 1}
       },
       {
-        "key": "down",
+        "key": "aluminumBat-down",
         "frames": {"start": 2, "end": 2}
       }
     ]
@@ -156,6 +156,49 @@
         "frameRate": 10
       }
     ]
+  },
+  "bullets": {
+    "sheet": "bullets",
+    "anims": [
+      {
+        "key": "bullets-idle",
+        "frames": {"start": 0, "end": 0}
+      }
+    ]
+  },
+  "katana": {
+    "sheet": "katana",
+    "anims": [
+      {
+        "key": "katana-idle",
+        "frames": {"start": 0, "end": 0}
+      },
+      {
+        "key": "katana-up",
+        "frames": {"start": 0, "end": 0}
+      },
+      {
+        "key": "katana-swing",
+        "frames": {"start": 1, "end": 1}
+      },
+      {
+        "key": "katana-down",
+        "frames": {"start": 2, "end": 2}
+      }
+    ]
+  },
+  "pistol": {
+    "sheet": "pistol",
+    "anims": [
+      {
+        "key": "pistol-idle",
+        "frames": {"start": 0, "end": 0}
+      },
+      {
+        "key": "pistol-shoot",
+        "frames": {"start": 1, "end": 4},
+        "frameRate": 10
+      }
+    ]
   }
-
 }

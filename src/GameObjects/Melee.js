@@ -1,18 +1,19 @@
 export default class Melee extends Phaser.GameObjects.Sprite {
 	constructor(config){
-		super(config.scene, config.key, config.damage, config.blowback, config.swingStart, config.swingLow, config.swingHigh, config.possession)
+		super(config.scene, config.key, config.name, config.damage, config.blowback, config.swingStart, config.swingLow, config.swingHigh, config.possession)
 		config.scene.physics.world.enable(this)
     config.scene.add.existing(this)
 
     // console.log(config.possession)
 
+    this.name = config.name
     this.swinging = false
     this.body.allowGravity = false
 		this.direction = 'left'
 		this.swingHold = 0
 
-		console.log('config')
-		console.log(config)
+		// console.log('config')
+		// console.log(config)
 
 		this.damage = config.damage
 		this.blowback = config.blowback
@@ -68,7 +69,7 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 				this.flipX = true		
 			}
 			this.y = y - 15
-			this.anims.play('up', true)
+			this.anims.play(`${this.name}-up`, true)
 			this.swingingDir = 'up'
 			//overlap
 			if (this.possession === 'player') {
@@ -91,7 +92,7 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 				this.flipX = true
 			}
 			this.y = y - 2
-			this.anims.play('swing', true)
+			this.anims.play(`${this.name}-swing`, true)
 			this.swingingDir = 'down'
 			//overlap
 			if (this.possession === 'player') {
@@ -112,7 +113,7 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 				this.flipX = true
 			}
 			this.y = y - 2
-			this.anims.play('down', true)
+			this.anims.play(`${this.name}-down`, true)
 			this.swingingDir = null
 			//overlap
 			if (this.possession === 'player') {
@@ -179,6 +180,5 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 		if(!weapon.swingingDir) {
 			weapon.cancelSwing(weapon, {canCollide: true})
 		}
-
 	}
 }

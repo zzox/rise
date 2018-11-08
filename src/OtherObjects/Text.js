@@ -34,8 +34,9 @@ export default class Text {
 	}
 
 	update (delta, scrollY) {
+		// console.log(scrollY)
 
-		if(!this.line) return
+		if(this.line === null) return
 
 		if (!this.alphaStop && !this.canFadeOut && this.line.alpha < 1){
 			if(this.alphaTime < this.alphaTimer) {

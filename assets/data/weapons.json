@@ -1,10 +1,18 @@
 {
 	"aluminumBat": {
-		"name": "Aluminum Bat",
+		"name": "aluminumBat",
 		"swingStart": 50,
 		"swingLow": 125,
 		"swingHigh": 200,
 		"damage": 50,
 		"blowback": 200
+	},
+	"katana": {
+		"name": "katana",
+		"swingStart": 40,
+		"swingLow": 100,
+		"swingHigh": 200,
+		"damage": 65,
+		"blowback": 150
 	}
 }

@@ -1,8 +1,8 @@
 import Player from '../Player/Player'
 import Pest from '../Enemies/Pest'
 import Text from '../OtherObjects/Text'
+import Bullet from '../GameObjects/Bullet'
 // import Opponent from '../Enemies/Opponent'
-// import Bullet from '../ForeignObjects/Bullet'
 
 // import GameState from '../utils/GameState'
 
@@ -28,6 +28,22 @@ export default class GameScene extends Phaser.Scene {
     console.log(this.stage)
 
     this.controls = this.scene.settings.data.controls
+    // this.control = {}
+
+    // TODO: changeable controls
+    // if(this.controls === 'arrows'){
+      this.control = {
+        jump: 'A',
+        melee: 'S',
+        shoot: 'D',
+        bomb: 'E',
+        dash: 'W',
+        slide: 'Q'
+      }
+      // this.control.jump
+    // } else {
+    // }
+
 
     // this.GameState = this.scene.settings.data.state
     // console.log(this.GameState)
@@ -110,7 +126,19 @@ export default class GameScene extends Phaser.Scene {
     //       this.load.spritesheet(enemy.name, `assets/characters/npc/${enemy.name}.png`, { frameWidth: 16, frameHeight: 16, spacing: 2, margin: 1 })
     //     }
     //   })
-    // }    
+    // }
+
+    this.items = this.stageConfig.items
+    if (this.items) {
+      this.items.map(item => {
+        if(!this.animsArray.includes(item.name)){
+          this.animsArray.push(item.name)
+
+          this.load.spritesheet(item.name, `assets/weapons/${item.name}.png`, { frameWidth: item.size.x, frameHeight: item.size.y, spacing: 2, margin: 1 })
+        }
+      })
+    }
+
 
     this.load.spritesheet('slob-p', 'assets/characters/player/slob.png', { frameWidth: 16, frameHeight: 16, spacing:2, margin:1})
     // this.load.tilemapTiledJSON(this.mapName, `assets/tilemaps/${this.town}/${this.mapName}.json`)
@@ -203,10 +231,17 @@ export default class GameScene extends Phaser.Scene {
     let text = this.stageConfig.text
 
     text.map(item => {
+      let textReplaced = item.text
+        .replace('jumpButton', this.control.jump)
+        .replace('meleeButton', this.control.melee)
+        .replace('shootButton', this.control.shoot)
+        .replace('bombButton', this.control.bomb)
+        .replace('slideButton', this.control.slide)
+        .replace('dashButton', this.control.dash)
       let it = new Text(
         this, 
         item.color, 
-        item.text, 
+        textReplaced, 
         item.position,
         item.scrollPosition,
         item.fadeTime,
@@ -360,6 +395,23 @@ export default class GameScene extends Phaser.Scene {
 
     // console.log(this)
 
+    this.itemGroup = []
+
+    this.items = this.items.map(item => {
+
+      let spr = this.add.sprite(item.position.x, item.position.y)
+
+      spr.play(`${item.name}-idle`)
+
+      return {
+        image: spr,
+        type: item.type,
+        name: item.name,
+        data: item.data,
+        visible: false
+      }
+    })
+
 
     console.log('this.cameras.main')
     console.log(this.cameras.main)
@@ -387,7 +439,7 @@ export default class GameScene extends Phaser.Scene {
       shoot: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
       bomb: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E),
       dash: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
-      item: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q)
+      slide: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q)
       // pause: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C)
     }
 
@@ -462,11 +514,11 @@ export default class GameScene extends Phaser.Scene {
 
     this.dialogBox.toggleVisible()
 
-    // this.bullets = this.add.group({
-    //   classType: Bullet,
-    //   maxSize: 50,
-    //   runChildUpdate: false
-    // })
+    this.bullets = this.add.group({
+      classType: Bullet,
+      maxSize: 50,
+      runChildUpdate: false
+    })
   }
 
   update(time, delta){
@@ -539,17 +591,55 @@ export default class GameScene extends Phaser.Scene {
     // console.log(this.player.y + ' ' + (this.cameras.main.scrollY + 270))
 
     if(this.player.y > this.cameras.main.scrollY + 270 + 30){
-      // console.log('die')
+      console.log('die')
     }
 
     this.pestGroup.children.entries.map(pest => pest.update(time, delta))
+    this.bullets.children.entries.map(bullet => bullet.update(time, delta))
     // this.opponentGroup.children.entries.map(opponent => opponent.update(time, delta))
-    // this.bullets.children.entries.map(bullet => bullet.update(time, delta))
     // Array.from(this.fireballs.children.entries).forEach(
     //         (fireball) => 
     //         {fireball.update(time, delta);
     //     });
 
+    this.items.map(item => {
+      if(!item.taken){
+        if(Math.abs(item.image.x - this.player.x) < 10 && Math.abs(item.image.y - this.player.y) < 16 && !item.taken){
+          item.image.visible = false
+
+          console.log(item.image)
+
+          item.taken = true
+
+          switch (item.type) {
+            case ('ammo'):
+              this.player.ammo += this.player.ammoInc
+              break
+            case ('gun'):
+              this.player.hasGun = true
+              this.player.gun = item.name
+              this.player.ammoInc = item.data.ammoInc
+              this.player.firePerSec = item.data.firePerSec
+              this.player.projFrequency = 1000 / this.player.firePerSec
+              break
+            case ('melee'):
+              this.player.hasMelee = true
+              // set the melee weapon with new stats and image, might need to 
+              // create a function on melee.js
+              console.log('item')
+              console.log(item)
+              this.player.meleeWeapon.name = item.name
+              this.player.meleeWeapon.damage = item.data.damage
+              this.player.meleeWeapon.blowback = item.data.blowback
+
+              this.player.meleeWeapon.swingStart = item.data.swingStart
+              this.player.meleeWeapon.swingLow = item.data.swingLow
+              this.player.meleeWeapon.swingHigh = item.data.swingHigh
+              break
+          }
+        }
+      }
+    })
 
 
     this.HUD.text = `H:${this.player.health}                              A:${this.player.ammo}                      $100`
@@ -636,6 +726,7 @@ export default class GameScene extends Phaser.Scene {
 
     this.textGroup.map(text => text.update(delta, this.cameras.main.scrollY))
 
+    // camera update
     if(this.cameraDelay === 0){
       this.cameraTime += delta
 
@@ -648,9 +739,9 @@ export default class GameScene extends Phaser.Scene {
 
         this.cameraTime = 0
 
-        if(this.cameraIncrement === 360){
-          this.cameraTimer = 25
-        }
+        // if(this.cameraIncrement === 360){
+        //   this.cameraTimer = 25
+        // }
       }
     } else {
       this.cameraDelay -= delta

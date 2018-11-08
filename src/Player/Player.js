@@ -1,4 +1,5 @@
 import Melee from '../GameObjects/Melee'
+import Gun from '../GameObjects/Gun'
 
 export default class Player extends Phaser.GameObjects.Sprite {
 
@@ -56,6 +57,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.meleeWeapon = new Melee({
       scene: this.scene,
       key: 'melee',
+      name: 'aluminumBat',
       swingStart: config.swingStart,
       swingLow: config.swingLow,
       swingHigh: config.swingHigh,
@@ -80,13 +82,21 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.tintStep = 0
 
     // proj
-    this.ammo = 6
+    // this.gun = new Gun({
+    //   scene: this.scene,
+    //   key: 'gun',
+    //   name: 'pistol'
+    // })
+
+    this.hasGun = false
+    this.gun = 'pistol'
+    this.ammoInc = 3
+    this.ammo = 0
     this.firePerSec = 1
     this.lastFired = 0
     this.projFrequency = 1000 / this.firePerSec
 
     // no grav proj
-
 
     this.prevState = {}
 
@@ -97,13 +107,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
   update(keys, time, delta) {
 
     // console.log(this.x + ' ' + this.y)
-    // console.log(' x')
-    // console.log(this.x + ' ' + this.y)
 
     // if (!this.scene){
     //   return
     // }
-    // console.log(this.x + " " + this.y)
     //use this?????
 
     if(!this.alive){
@@ -239,22 +246,22 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
 
     //proj logic
-    // if(input.shoot && this.hasGun && (time > this.lastFired || this.lastFired === 0) && 
-    //   !(this.meleeWeapon.swingHold > 0 && this.meleeWeapon.swingHold < this.meleeWeapon.swingHigh || this.meleeWeapon.swinging)) {
-    //   // console.log(this.scene.projectiles)
-    //   let bullet = this.scene.bullets.get()
-    //   // console.log(bullet)
-    //   if(bullet && this.ammo > 0){
-    //     // console.log(this.body.x + " " + this.body.y)
-    //     bullet.fire(this.body.x + 6, this.body.y + 10, this.flipX ? 'right' : 'left', 'player')
-    //     this.ammo--
-    //     this.lastFired = time + this.projFrequency
+    if(input.shoot && this.hasGun && (time > this.lastFired || this.lastFired === 0) && 
+      !(this.meleeWeapon.swingHold > 0 && this.meleeWeapon.swingHold < this.meleeWeapon.swingHigh || this.meleeWeapon.swinging)) {
+      // console.log(this.scene.projectiles)
+      let bullet = this.scene.bullets.get()
+      // console.log(bullet)
+      if(bullet && this.ammo > 0){
+        // console.log(this.body.x + " " + this.body.y)
+        bullet.fire(this.body.x + 6, this.body.y + 10, this.flipX ? 'right' : 'left', 'player')
+        this.ammo--
+        this.lastFired = time + this.projFrequency
 
-    //     // this.scene.ammoText.text = 'AMMO ' + this.ammo
-    //   } else {
-    //     console.log("no more projectiles!! out of ammo")
-    //   }
-    // }
+        // this.scene.ammoText.text = 'AMMO ' + this.ammo
+      } else {
+        console.log("no more projectiles!! out of ammo")
+      }
+    }
 
     //wall logic
     if(this.body.blocked.left && !this.body.blocked.down && input.left ||
@@ -292,7 +299,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
 
     //dash logic
-    if(input.dash && !this.prevState.dash && this.canDash && this.dashes < this.maxDashes){
+    if(input.dash && !this.prevState.dash && 
+      this.canDash && !this.dashWarming && 
+      !this.dashing && this.dashes < this.maxDashes){
       this.dashes++
       this.dashWarming = true
       this.body.allowGravity = false
@@ -400,7 +409,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       else {
         this.body.setAccelerationX(vel / 2)
       }
-      if(!this.meleeWeapon.swinging){
+      if(!this.meleeWeapon.swinging && !this.gun.shooting){
         this.flipX = dir < 0 ? false : true
       }
     }
