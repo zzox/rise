@@ -1,42 +1,53 @@
 import Melee from '../GameObjects/Melee'
 import Gun from '../GameObjects/Gun'
 
-export default class Player extends Phaser.GameObjects.Sprite {
+export default class Boss extends Phaser.GameObjects.Sprite {
   constructor(config) {
-    super(config.scene, config.x, config.y, config.key, config.hasGun, config.hasSword, config.maxJumps, config.maxDashes)
+    super(config.scene, config.x, config.y, config.name, config.hasGun, config.hasSword, config.maxJumps, config.maxDashes)
     config.scene.physics.world.enable(this)
     config.scene.add.existing(this)
 
-    this.animation = "stand" //????? maybe not best practice
+    this.beenSeen = false
 
     this.hasSword = config.hasSword
     this.hasGun = config.hasGun
     this.maxJumps = config.maxJumps
     this.maxDashes = config.maxDashes
-  }
+    this.player = this.scene.player
+    this.name = config.name
 
-  create(){
+    console.log(config)
+
+ 
     // console.log("create Player???")
     // original val = 125
-    this.body.maxVelocity.x = 150
-    this.body.maxVelocity.y = 300
-    this.acceleration = 800
 
+
+    this.jumps = 0
     this.jumping = false
     this.jumpTimer = 120
     this.jumpHold = false
     this.falling = false
-    this.jumpVelocity = 200
-    this.wallJumpVelocity = 100
+    this.jumpVelocity = config.details.jumpVelocity
+    this.wallJumpVelocity = this.jumpVelocity / 2
+    this.hasSword = config.details.hasSword
+    this.hasGun = config.details.hasGun
+    this.maxJumps = config.details.maxJumps
+    this.flipX = config.flipX
+    this.health = config.details.health
 
-    this.health = 100
+    this.body.maxVelocity.x = config.details.maxVelocityX
+    this.body.maxVelocity.y = 300
+    this.acceleration = 800
+
 
     this.body.offset.set(14, 8)
     this.body.setSize(10, 16)
+    this.anims.play(`${this.name}-stand`)
+
 
     // this.setDisplaySize(64, 64)
 
-    this.anims.play('stand')
     //this.anims = this.scene.anims
     this.exitDoorTime = 0
     // this.depth = 1
@@ -51,17 +62,18 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     this.weapon = 'aluminumBat'
 
-    let config = this.scene.weaponsConfig[this.weapon]
+    let wepConfig = this.scene.weaponsConfig[this.weapon]
 
     this.meleeWeapon = new Melee({
       scene: this.scene,
       key: 'melee',
       name: 'aluminumBat',
-      swingStart: config.swingStart,
-      swingLow: config.swingLow,
-      swingHigh: config.swingHigh,
-      damage: config.damage,
-      blowback: config.blowback
+      swingStart: wepConfig.swingStart,
+      swingLow: wepConfig.swingLow,
+      swingHigh: wepConfig.swingHigh,
+      damage: wepConfig.damage,
+      blowback: wepConfig.blowback,
+      possession: 'opponent'
     })
 
     // dash
@@ -80,25 +92,41 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.hurtTime = 0
     this.tintStep = 0
 
-    this.hasGun = false
+    // this.hasGun = false
     this.gun = 'pistol'
     this.ammoInc = 3
-    this.ammo = 0
+    this.ammo = 50
     this.firePerSec = 1
     this.lastFired = 0
     this.projFrequency = 1000 / this.firePerSec
     this.shooting = false
 
-    // proj
+    // proj    this.decisionTimer = config.details.decisionTime
+    this.decisionTimer = config.details.decisionTime
+    this.decisionTime = 0
     this.gun = new Gun({
       scene: this.scene,
       key: 'gun',
       name: 'pistol',
       player: this,
-      from: 'player'
+      from: 'boss'
     })
 
     // no grav proj
+
+
+    this.state = 'approach'
+
+    this.prevState = {}
+
+    this.holds = {
+      left: 0,
+      right: 0,
+      up: 0,
+      down: 0,
+      jump: 0,
+      shoot: 0
+    }
 
     this.prevState = {}
 
@@ -106,7 +134,27 @@ export default class Player extends Phaser.GameObjects.Sprite {
     // this.wallSlowing = false
   }
 
-  update(keys, time, delta) {
+  activated () {
+    if(!this.beenSeen){
+      if(this.player.y < this.y + 8){
+        this.beenSeen = true
+        return true
+      }
+      return false
+    }
+    return true
+  }
+
+  update(time, delta) {
+
+    if (!this.alive) {
+      // suspicious
+      if(this.tint !== 0x000000) {
+        this.scene.bossesNum--
+        this.tint = 0x000000
+      }
+      return
+    }
 
     // console.log(this.x + ' ' + this.y)
 
@@ -115,44 +163,162 @@ export default class Player extends Phaser.GameObjects.Sprite {
     // }
     //use this?????
 
-    if(!this.alive){
-      this.scene.scene.start('TitleScene')
+    if(!this.activated()) return
+
+
+    this.decisionTime += delta
+    if(this.decisionTime > this.decisionTimer || this.decisionTimer < 20){
+      this.decisionTime = 0
+  
+
+    // State Logic
+    
+    //state decider
+      if(this.hurt){
+        this.state = 'evade'
+      } else if(Math.random() > .7){
+        console.log('chilling')
+        this.state = 'chill'
+      } else if(Math.abs(this.player.x - this.x) < 25 &&
+                Math.abs(this.player.y - this.y) < 25) {
+        this.state = 'attack'
+      } else {
+        this.state = 'approach'
+      }
+
     }
 
-    if(this.clearKeyTime < 333){
-      this.clearKeyTime += delta
-      return
-    } else {
-      // put in key clear here???
+
+
+
+
+    let input = {
+      left: false,
+      right: false,
+      up: false,
+      down: false,
+      jump: false,
+      melee: false,
+      shoot: false
     }
 
-    // this.scene.gfx.strokeRect(this.x, this.y, this.body.width, this.body.height);
-    // this.exitDoorTime += delta
+    // for(let key in input){
+    //   if(Math.random() > .6) {
+    //     input[key] = true
+    //   } 
+    // }
 
+    // console.log(this.state)
+    switch(this.state) {
+      case 'approach':
+        if(this.player.x < this.x){
+          input.left = true
+          input.right = false
+          if(this.body.blocked.left && this.body.blocked.down
+            || this.jumping && this.body.blocked.left){
+            input.jump = true
+          }
+        } else {
+          input.right = true 
+          input.left = false
+          if(this.body.blocked.right && this.body.blocked.down
+            || this.jumping && this.body.blocked.right){
+            input.jump = true
+          }
+        }
+        break
+      case 'evade':
+        if(this.player.x < this.x){
+          input.left = false
+          input.right = true
+          if(this.body.blocked.right && this.body.blocked.down
+            || this.jumping && this.body.blocked.right){
+            input.jump = true
+          }
+        } else {
+          input.right = false
+          input.left = true
+          if(this.body.blocked.left && this.body.blocked.down
+            || this.jumping && this.body.blocked.left){
+            input.jump = true
+          }
+        }
+        break
+      case 'attack':
+        if(this.player.x < this.x){
+          input.left = true
+          input.right = false
+          input.melee = true
+        } else {
+          input.left = false
+          input.right = true
+          input.melee = true          
+        }
+        break
+      case 'chill':
+        input.left = false
+        input.right = false
+        input.up = false
+        input.down = false
+        input.jump = false
+        input.melee = false          
+        input.shoot = false          
+        break
+    }
+
+    if(Math.abs(this.player.y - this.x) < 16){
+      if(Math.random() > .5){
+        input.shoot = true
+      } else {
+        input.jump = true
+      }
+    }
+
+    //clear stuff
+    if(this.holds.jump > 333){
+      input.jump = false
+    }
+
+    if(this.holds.shoot > 50){
+      input.shoot = false
+    }
+
+    if(this.meleeWeapon.swingHold > 200){
+      input.melee = false
+    }
+
+    //calc holds
+    for(let key in this.holds) {
+      if(input[key]){
+        this.holds[key] += delta
+      } else {
+        this.holds[key] = 0
+      }
+    }
 
     /////////////////////////////////////////////////////////////
     //Input logic
-    let input = {
-      left: keys.left.isDown,
-      right: keys.right.isDown,
-      up: keys.up.isDown,
-      down: keys.down.isDown,
-      jump: keys.jump.isDown,
-      melee: keys.melee.isDown,
-      shoot: keys.shoot.isDown,
-      dash: keys.dash.isDown
-    }
+    // let input = {
+    //   left: keys.left.isDown,
+    //   right: keys.right.isDown,
+    //   up: keys.up.isDown,
+    //   down: keys.down.isDown,
+    //   jump: keys.jump.isDown,
+    //   melee: keys.melee.isDown,
+    //   shoot: keys.shoot.isDown,
+    //   dash: keys.dash.isDown
+    // }
 
-    // holds
-    let holds = {
-      left: keys.left.timeDown,
-      right: keys.right.timeDown,
-      up: keys.up.timeDown,
-      down: keys.down.timeDown,
-      jump: keys.jump.timeDown,
-      shoot: keys.shoot.timeDown,
-      dash: keys.dash.timeDown
-    }
+    // // holds
+    // let holds = {
+    //   left: keys.left.timeDown,
+    //   right: keys.right.timeDown,
+    //   up: keys.up.timeDown,
+    //   down: keys.down.timeDown,
+    //   jump: keys.jump.timeDown,
+    //   shoot: keys.shoot.timeDown,
+    //   dash: keys.dash.timeDown
+    // }
 
     // if(this.scene.exitLayer && input.up && !this.exiting){
     //   this.exiting = true
@@ -294,7 +460,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       if(this.hurtTime > this.hurtTimer){
         this.hurt = false
         this.hurtTime = 0
-        console.log('player no longer hurt')
+        // console.log('player no longer hurt')
       } else {
         this.hurtTime += delta
       }
@@ -321,7 +487,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     if(this.dashWarming){
       if(this.dashTime > this.dashTimer || this.prevState.dash && !input.dash){
-        console.log('dashing')
+        // console.log('dashing')
         this.dash(this.flipX, this.dashTime, this.dashTimer)
       } else {
         this.body.setVelocity(0)
@@ -382,15 +548,21 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
     }
 
-    this.anims.play(this.animation, true)
+    // console.log(this.animation)
+    // console.log(this.anims.currentAnim.key)
+    // console.log(this.anims)
+    // if(this.anims.currentAnim.key != this.animation){
+      // console.log("playing new")
+      // console.log(this.anims)
+      this.anims.play(`${this.name}-${this.animation}`, true)
 
-    this.meleeWeapon.update(time, delta, this.x, this.y, this.flipX ? 'right' : 'left')
+      this.meleeWeapon.update(time, delta, this.x, this.y, this.flipX ? 'right' : 'left')
 
-    this.prevState.flipX = this.flipX
-    this.prevState.jump = input.jump
-    this.prevState.melee = input.melee
-    this.prevState.dash = input.dash
-    this.prevState.shoot = input.shoot
+      this.prevState.flipX = this.flipX
+      this.prevState.jump = input.jump
+      this.prevState.melee = input.melee
+      this.prevState.dash = input.dash
+      this.prevState.shoot = input.shoot
     // }
   }
 

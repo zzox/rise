@@ -34,6 +34,8 @@ export default class TitleScene extends Phaser.Scene {
     this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
 
     this.cameras.main.fadeIn(2000)
+
+    alert('new game')
   }
 
   update(){
@@ -69,7 +71,6 @@ export default class TitleScene extends Phaser.Scene {
 
   newGame(){
     this.scene.start('GameScene', { stage: 'desert' })
-    this.anims.remove('stand')
   }
 
   loadGame(){

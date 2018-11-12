@@ -1,6 +1,6 @@
 {
   "slob": {
-    "sheet": "slob-p",
+    "sheet": "slob",
     "anims": [
       {
         "key": "run",
@@ -37,6 +37,49 @@
       },
       {
         "key": "swing-run",
+        "frames": {"start": 10, "end": 15},
+        "frameRate": 10
+      }
+    ]
+  },
+  "bigBro": {
+    "sheet": "bigBro",
+    "anims": [
+      {
+        "key": "bigBro-run",
+        "frames": {"start": 0, "end": 5},
+        "frameRate": 10
+      },
+      {
+        "key": "bigBro-stand",
+        "frames": {"start": 6, "end": 6}
+      },
+      {
+        "key": "bigBro-jump",
+        "frames": {"start": 3, "end": 3}
+      },
+      {
+        "key": "bigBro-slide-vert",
+        "frames": {"start": 7, "end": 7}
+      },
+      {
+        "key": "bigBro-swing-up",
+        "frames": {"start": 8, "end": 8}
+      },
+      {
+        "key": "bigBro-swing-down",
+        "frames": {"start": 9, "end": 9}
+      },
+      {
+        "key": "bigBro-swing-stand",
+        "frames": {"start": 10, "end": 10}
+      },
+      {
+        "key": "bigBro-swing-jump",
+        "frames": {"start": 13, "end": 13}
+      },
+      {
+        "key": "bigBro-swing-run",
         "frames": {"start": 10, "end": 15},
         "frameRate": 10
       }
@@ -197,7 +240,8 @@
       {
         "key": "pistol-shoot",
         "frames": {"start": 1, "end": 4},
-        "frameRate": 10
+        "frameRate": 20,
+        "repeat": 1
       }
     ]
   }

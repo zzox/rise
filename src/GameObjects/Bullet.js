@@ -7,7 +7,7 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
     this.body.setSize(8, 4)
     this.body.offset.set(12, 14)
 
-    this.body.setCollideWorldBounds(true)
+    // this.body.setCollideWorldBounds(true)
 
     // this.on('animationcomplete', () => {
     //     if (this.anims.currentAnim.key === 'fireExplode') {
@@ -19,7 +19,7 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
     //to be dynamic vvvvvv
     this.velocity = 800
     this.damage = 10
-    this.blowback = 200
+    this.blowback = 150
 
 
     this.direction = 'left'
@@ -58,15 +58,15 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
     // this.scene.physics.world.collide(this, this.scene.worldBounds, this.hitGround)
 
     if(this.from === 'player'){
-      if(this.scene.opponentGroup) {
-        console.log('opp')
-        this.scene.physics.world.overlap(this, this.scene.opponentGroup, this.hitEnemy)
+      if(this.scene.bossGroup) {
+        // console.log('opp')
+        this.scene.physics.world.overlap(this, this.scene.bossGroup, this.hitEnemy)
       }
       if(this.scene.pestGroup){
-        console.log('pest')
+        // console.log('pest')
         this.scene.physics.world.overlap(this, this.scene.pestGroup, this.hitEnemy)
       }
-    } else if(this.from === 'opponent'){
+    } else if(this.from === 'boss'){
       this.scene.physics.world.overlap(this, this.scene.player, this.hitEnemy)
     }
     this.scene.physics.world.overlap(this, this.scene.enemyGroup, this.hitEnemy)

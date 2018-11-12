@@ -2,7 +2,7 @@ import Player from '../Player/Player'
 import Pest from '../Enemies/Pest'
 import Text from '../OtherObjects/Text'
 import Bullet from '../GameObjects/Bullet'
-// import Opponent from '../Enemies/Opponent'
+import Boss from '../Enemies/Boss'
 
 // import GameState from '../utils/GameState'
 
@@ -115,6 +115,17 @@ export default class GameScene extends Phaser.Scene {
       })
     }
 
+    this.bosses = this.stageConfig.bosses
+    if(this.bosses) {
+      this.bosses.map(boss => {
+        if(!this.animsArray.includes(boss.name)){
+                                                                                          // make this come from the boss object
+          this.animsArray.push(boss.name)
+          this.load.spritesheet(boss.name, `assets/characters/bosses/${boss.name}.png`, { frameWidth: 16, frameHeight: 16, spacing: 2, margin: 1 })
+        }
+      })
+    }
+
     // this.opponents = this.gameConfig.content.opponents
     // console.log(this.opponents)
 
@@ -140,7 +151,7 @@ export default class GameScene extends Phaser.Scene {
     }
 
 
-    this.load.spritesheet('slob-p', 'assets/characters/player/slob.png', { frameWidth: 16, frameHeight: 16, spacing:2, margin:1})
+    this.load.spritesheet('slob', 'assets/characters/player/slob.png', { frameWidth: 16, frameHeight: 16, spacing:2, margin:1})
     // this.load.tilemapTiledJSON(this.mapName, `assets/tilemaps/${this.town}/${this.mapName}.json`)
 
     this.load.spritesheet(`${this.stage}-tiles`, `assets/tilesets/${this.stage}.png`, { frameWidth: 16, frameHeight: 16, spacing: 2, margin: 1 })
@@ -158,6 +169,8 @@ export default class GameScene extends Phaser.Scene {
     this.cameraNudge = 1
     this.cameraDelay = 7000
     this.cameraIncrement = 0
+
+    this.bossesNum = 0
   }
 
   create(){
@@ -293,6 +306,7 @@ export default class GameScene extends Phaser.Scene {
 
     playerX = 16 * 2.5
     playerY = 16 * 60
+    // playerY = 16 * 5
 
     this.player = new Player({
       scene: this,
@@ -362,37 +376,37 @@ export default class GameScene extends Phaser.Scene {
     }
 
     this.physics.add.overlap(this.player, this.pestGroup, this.player.hurtByEnemy)
-    // this.opponentGroup = this.add.group()
+    this.bossGroup = this.add.group()
 
-    // if(this.opponents){
-    //     // console.log(this.worldConfig.content)
-    //   this.opponents.map(enemy => {
-    //     // console.log('enemy')
-    //     // console.log(enemy)
-    //     // console.log('enemyConfig')
-    //     // console.log(this.enemyConfig)
-    //     let pos
-    //     let flipX = false// = enemy.position.split('x')
-    //     if(enemy.position === 2) {
-    //       pos = [27, 15.5]
-    //       flipX = true
-    //     }
-    //     console.log(pos)
-    //     console.log(this.opponentConfig[enemy.name])
-    //     this.opponentGroup.add(new Opponent({
-    //       scene: this,
-    //       key: 'opponent',
-    //       x: Number(pos[0]) * 16 + this.screenOffset.x + 8,
-    //       y: Number(pos[1]) * 16 + this.screenOffset.y,
-    //       name: enemy.name,
-    //       details: this.opponentConfig[enemy.name],
-    //       flipX: flipX
-    //     })) 
-    //   })
-    //   console.log('enemies here')
-    //   this.physics.add.collider(this.contactLayer, this.opponentGroup)
-    // }
+    if(this.bosses){
+        // console.log(this.worldConfig.content)
+      this.bosses.map(enemy => {
+        // console.log('enemy')
+        // console.log(enemy)
+        // console.log('enemyConfig')
+        // console.log(this.enemyConfig)
 
+        this.bossesNum++
+
+        let pos
+        let flipX = false// = enemy.position.split('x')
+        console.log(pos)
+        // console.log(this.opponentConfig[enemy.name])
+        this.bossGroup.add(new Boss({
+          scene: this,
+          key: 'opponent',
+          x: enemy.position.x,
+          y: enemy.position.y,
+          name: enemy.name,
+          details: enemy.details,
+          flipX: flipX
+        })) 
+      })
+      console.log('enemies here')
+      this.physics.add.collider(this.contactLayer, this.bossGroup)
+    }
+
+    // this.physics.add.overlap(this.player, this.bossGroup, this.player.hurtByEnemy)
     // console.log(this)
 
     this.itemGroup = []
@@ -525,6 +539,11 @@ export default class GameScene extends Phaser.Scene {
     // switching scene, do not want to run update()
     if(this.switching) return
 
+    if (this.bosses && this.bossesNum === 0) {
+      this.cameras.main.fadeOut(2000)
+      // this.scene.pause()
+    }
+
     // dialog is happening, 
     if(this.dialogOpen) {
       let line = this.dialogLine
@@ -596,7 +615,7 @@ export default class GameScene extends Phaser.Scene {
 
     this.pestGroup.children.entries.map(pest => pest.update(time, delta))
     this.bullets.children.entries.map(bullet => bullet.update(time, delta))
-    // this.opponentGroup.children.entries.map(opponent => opponent.update(time, delta))
+    this.bossGroup.children.entries.map(boss => boss.update(time, delta))
     // Array.from(this.fireballs.children.entries).forEach(
     //         (fireball) => 
     //         {fireball.update(time, delta);
@@ -617,7 +636,7 @@ export default class GameScene extends Phaser.Scene {
               break
             case ('gun'):
               this.player.hasGun = true
-              this.player.gun = item.name
+              // this.player.gun = item.name
               this.player.ammoInc = item.data.ammoInc
               this.player.firePerSec = item.data.firePerSec
               this.player.projFrequency = 1000 / this.player.firePerSec

@@ -74,7 +74,7 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 			//overlap
 			if (this.possession === 'player') {
 				this.scene.physics.world.overlap(this, this.scene.pestGroup, this.hurtEnemy)
-				this.scene.physics.world.overlap(this, this.scene.opponentGroup, this.hurtEnemy)
+				this.scene.physics.world.overlap(this, this.scene.bossGroup, this.hurtEnemy)
 			} else if(this.possession === 'opponent') {
 				this.scene.physics.world.overlap(this, this.scene.player, this.hurtPlayer)
 			}
@@ -97,7 +97,7 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 			//overlap
 			if (this.possession === 'player') {
 				this.scene.physics.world.overlap(this, this.scene.pestGroup, this.hurtEnemy)
-				this.scene.physics.world.overlap(this, this.scene.opponentGroup, this.hurtEnemy)
+				this.scene.physics.world.overlap(this, this.scene.bossGroup, this.hurtEnemy)
 			} else if(this.possession === 'opponent') {
 				this.scene.physics.world.overlap(this, this.scene.player, this.hurtPlayer)
 			}
@@ -118,7 +118,7 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 			//overlap
 			if (this.possession === 'player') {
 				this.scene.physics.world.overlap(this, this.scene.pestGroup, this.hurtEnemy)
-				this.scene.physics.world.overlap(this, this.scene.opponentGroup, this.hurtEnemy)
+				this.scene.physics.world.overlap(this, this.scene.bossGroup, this.hurtEnemy)
 			} else if(this.possession === 'opponent') {
 				this.scene.physics.world.overlap(this, this.scene.player, this.hurtPlayer)
 			}

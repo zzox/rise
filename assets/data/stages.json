@@ -22,6 +22,24 @@
         "position": "21x21.5"
       }
     ],
+    "bosses": [{
+      "name": "bigBro",
+      "level": 1,
+      "position": {"x":400, "y": 232},
+      "details": {
+        "speed": 200,
+        "attackSpeed": 150,
+        "stillDamage": 5,
+        "attackDamage": 20,
+        "decisionTime": 500,
+        "jumpVelocity": 150,
+        "maxVelocityX": 125,
+        "health": 100,
+        "hasSword": true,
+        "hasGun": true,
+        "maxJumps": 2
+      }
+    }],
     "text": [
       {
         "color": "0x000000",
@@ -83,7 +101,7 @@
         "color": "0x000000",
         "text": "Sup little bro?",
         "position": {"x": 350, "y": 200},
-        "scrollPosition": 100,
+        "scrollPosition": 120,
         "fadeTime": 50,
         "fadesOut": true
       }
@@ -105,7 +123,7 @@
         "type": "gun",
         "name": "pistol",
         "position": {"x": 24, "y": 406},
-        "size": {"x": 8, "y": 8},
+        "size": {"x": 16, "y": 16},
         "data": {
           "ammoInc": 3,
           "firePerSec": 2
