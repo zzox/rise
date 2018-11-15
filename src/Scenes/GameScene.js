@@ -23,6 +23,8 @@ export default class GameScene extends Phaser.Scene {
 
   preload(){
 
+    this.switching = true
+
     this.stage = this.scene.settings.data.stage
     console.log(this.scene)
     console.log(this.stage)
@@ -65,6 +67,10 @@ export default class GameScene extends Phaser.Scene {
     this.pestConfig = this.sys.cache.json.entries.entries.pests
     this.weaponsConfig = this.sys.cache.json.entries.entries.weapons
     // this.opponentConfig = this.sys.cache.json.entries.entries.opponents
+
+    console.log(this.stageConfig)
+
+    this.nextStage = this.stageConfig.nextStage
 
     this.dialogLine = 0
     this.dialogPos = 0
@@ -167,10 +173,13 @@ export default class GameScene extends Phaser.Scene {
     this.cameraTime = 0
     this.cameraNudge = 0
     this.cameraNudge = 1
-    this.cameraDelay = 7000
+    this.cameraDelay = 1000 * this.stageConfig.cameraDelay
     this.cameraIncrement = 0
 
     this.bossesNum = 0
+
+    this.goingNext = false
+    this.goingNextTime = 1000
   }
 
   create(){
@@ -197,9 +206,6 @@ export default class GameScene extends Phaser.Scene {
       key: this.stage
     })
 
-    console.log('this.map')
-    console.log(this.map)
-
     // may need to implement if statements protecting from multiple addTilesetImages
     // let layers = this.gameConfig.content.layers
 
@@ -209,7 +215,6 @@ export default class GameScene extends Phaser.Scene {
     // for (let i = layers.length - 1; i >= 0; i--) {
     //   if(layers[i] === 'contactLayer'){
         this.contactTileSet = this.map.addTilesetImage(this.stage, `${this.stage}-tiles`)
-        console.log(this.contactTileSet)
         // this.contactLayer = this.map.createDynamicLayer('contactLayer', this.contactTileSet, 0 + this.screenOffset.x, 0/* + this.hudHeight + this.screenOffset.y*/)
         this.contactLayer = this.map.createDynamicLayer('contactLayer', this.contactTileSet, 0, 0 + this.hudHeight)
         this.contactLayer.setCollisionByProperty({ collide: true })
@@ -305,7 +310,8 @@ export default class GameScene extends Phaser.Scene {
     this.playerMaxDashes = 1
 
     playerX = 16 * 2.5
-    playerY = 16 * 60
+    playerY = this.stageConfig.playerY
+    // alert(this.stageConfig.playerY)
     // playerY = 16 * 5
 
     this.player = new Player({
@@ -313,10 +319,10 @@ export default class GameScene extends Phaser.Scene {
       key: 'player',
       x: playerX,
       y: playerY,
-      hasGun: this.playerHasGun,
-      HasSword: this.playerHasSword,
-      maxJumps: this.playerMaxJumps,
-      maxDashes: this.playerMaxDashes
+      hasGun: this.stageConfig.hasGun,
+      HasSword: this.stageConfig.hasSword,
+      maxJumps: this.stageConfig.maxJumps,
+      maxDashes: this.stageConfig.maxDashes
     })
     this.player.create()
     this.player.flipX = true // for now
@@ -433,7 +439,7 @@ export default class GameScene extends Phaser.Scene {
     this.cameras.main.fadeIn(500)
       .startFollow(this.player)
       .setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels + this.hudHeight) // <- may need to change with long and narrow or high amd skinny
-      .setBackgroundColor('#80e5ff')
+      .setBackgroundColor(`#${this.stageConfig.bgColor}`)
       .stopFollow()
       // .setLerp(.8, .8)
 
@@ -533,15 +539,26 @@ export default class GameScene extends Phaser.Scene {
       maxSize: 50,
       runChildUpdate: false
     })
+
+    this.switching = false
   }
 
   update(time, delta){
     // switching scene, do not want to run update()
-    if(this.switching) return
+    if (this.switching) return
 
-    if (this.bosses && this.bossesNum === 0) {
-      this.cameras.main.fadeOut(2000)
+    if (this.bosses && this.bossesNum === 0 && !this.goingNext) {
+      this.cameras.main.fadeOut(1000)
+      this.goingNext = true
       // this.scene.pause()
+    }
+
+    if (this.goingNext) {
+      if(this.goingNextTime > 0) {
+        this.goingNextTime -= delta
+      } else {
+        this.scene.start('IntermediateScene', { nextStage: this.nextStage })
+      }
     }
 
     // dialog is happening, 
@@ -733,7 +750,7 @@ export default class GameScene extends Phaser.Scene {
     // if (this.enemiesNum <= 0) {
     //   this.scene.pause()
     //   // this.switching = true
-    //   this.GameState.nextLevel()
+    //   this.GameState.nextStage()
 
     //   setTimeout(() => {
     //     console.log('launching')

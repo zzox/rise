@@ -1,5 +1,13 @@
 {
   "desert":{
+    "cameraDelay": 7,
+    "playerY": 960,
+    "maxJumps": 1,
+    "maxDashes": 0,
+    "hasGun": false,
+    "gun": "",
+    "hasSword": true,
+    "sword": "aluminumBat",
     "pests":[
       {
         "name": "snake",
@@ -32,7 +40,7 @@
         "stillDamage": 5,
         "attackDamage": 20,
         "decisionTime": 500,
-        "jumpVelocity": 150,
+        "jumpVelocity": 200,
         "maxVelocityX": 125,
         "health": 100,
         "hasSword": true,
@@ -145,6 +153,142 @@
     ],
     "nearground": false,
     "bgTileset": false,
-    "bgColor": "80e5ff"
+    "bgColor": "80e5ff",
+    "nextStage": "desertForest"
+  },
+  "desertForest":{
+    "cameraDelay": 6,
+    "playerY": 1200,
+    "maxJumps": 2,
+    "maxDashes": 1,
+    "hasGun": false,
+    "gun": "",
+    "hasSword": true,
+    "sword": "aluminumBat",
+    "bosses": [{
+      "name": "bigBro",
+      "level": 1,
+      "position": {"x":400, "y": 232},
+      "details": {
+        "speed": 200,
+        "attackSpeed": 150,
+        "stillDamage": 5,
+        "attackDamage": 20,
+        "decisionTime": 500,
+        "jumpVelocity": 200,
+        "maxVelocityX": 125,
+        "health": 100,
+        "hasSword": true,
+        "hasGun": true,
+        "maxJumps": 2
+      }
+    }],
+    "text": [
+      {
+        "color": "0x000000",
+        "text": "It's too hot",
+        "position": {"x": 80, "y": 880},
+        "scrollPosition": 710,
+        "fadeTime": 75,
+        "fadesOut": true
+      },
+      {
+        "color": "0x000000",
+        "text": "Press jumpButton to jump",
+        "position": {"x": 290, "y": 950},
+        "scrollPosition": 900,
+        "fadeTime": 100,
+        "fadesOut": false
+      },
+      {
+        "color": "0x000000",
+        "text": "Press > and jumpButton into a wall to kick off",
+        "position": {"x": 192, "y": 765},
+        "scrollPosition": 670,
+        "fadeTime": 100,
+        "fadesOut": false
+      },
+      {
+        "color": "0xFFFFFF",
+        "text": "Find your rythm",
+        "position": {"x": 280, "y": 600},
+        "scrollPosition": 550,
+        "fadeTime": 75,
+        "fadesOut": true
+      },
+      {
+        "color": "0x000000",
+        "text": "Press meleeButton to swing your weapon",
+        "position": {"x": 200, "y": 470},
+        "scrollPosition": 450,
+        "fadeTime": 100,
+        "fadesOut": false
+      },
+      {
+        "color": "0xFFFFFF",
+        "text": "Here's a gun",
+        "position": {"x": 84, "y": 418},
+        "scrollPosition": 375,
+        "fadeTime": 100,
+        "fadesOut": false
+      },
+      {
+        "color": "0xFFFFFF",
+        "text": "Did you remember your ammo?  (press shootButton to shoot)",
+        "position": {"x": 84, "y": 434},
+        "scrollPosition": 325,
+        "fadeTime": 100,
+        "fadesOut": false
+      },
+      {
+        "color": "0x000000",
+        "text": "Sup little bro?",
+        "position": {"x": 350, "y": 200},
+        "scrollPosition": 120,
+        "fadeTime": 50,
+        "fadesOut": true
+      }
+    ],
+    "items": [
+      {
+        "type": "ammo",
+        "name": "bullets",
+        "position": {"x": 234, "y": 966},
+        "size": {"x": 16, "y": 16}
+      },
+      {
+        "type": "ammo",
+        "name": "bullets",
+        "position": {"x": 170, "y": 726},
+        "size": {"x": 16, "y": 16}
+      },
+      {
+        "type": "gun",
+        "name": "pistol",
+        "position": {"x": 24, "y": 406},
+        "size": {"x": 16, "y": 16},
+        "data": {
+          "ammoInc": 3,
+          "firePerSec": 2
+        }
+      },
+      {
+        "type": "melee",
+        "name": "katana",
+        "position": {"x": 362, "y": 358},
+        "size": {"x": 16, "y": 16},
+        "data": {
+          "swingStart": 40,
+          "swingLow": 100,
+          "swingHigh": 200,
+          "damage": 65,
+          "blowback": 150
+        }
+      }
+    ],
+    "nearground": false,
+    "bgTileset": false,
+    "bgColor": "80ffeb",
+    "nextStage": "forest"
   }
 }

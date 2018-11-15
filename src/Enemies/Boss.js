@@ -152,6 +152,7 @@ export default class Boss extends Phaser.GameObjects.Sprite {
       if(this.tint !== 0x000000) {
         this.scene.bossesNum--
         this.tint = 0x000000
+        this.body.setVelocity(0)
       }
       return
     }
@@ -179,7 +180,7 @@ export default class Boss extends Phaser.GameObjects.Sprite {
       } else if(Math.random() > .7){
         console.log('chilling')
         this.state = 'chill'
-      } else if(Math.abs(this.player.x - this.x) < 25 &&
+      } else if(Math.abs(this.player.x - this.x) < 35 &&
                 Math.abs(this.player.y - this.y) < 25) {
         this.state = 'attack'
       } else {
@@ -215,14 +216,14 @@ export default class Boss extends Phaser.GameObjects.Sprite {
           input.left = true
           input.right = false
           if(this.body.blocked.left && this.body.blocked.down
-            || this.jumping && this.body.blocked.left){
+            || this.prevState.jump && this.body.blocked.left){
             input.jump = true
           }
         } else {
           input.right = true 
           input.left = false
           if(this.body.blocked.right && this.body.blocked.down
-            || this.jumping && this.body.blocked.right){
+            || this.prevState.jump && this.body.blocked.right){
             input.jump = true
           }
         }
@@ -232,14 +233,14 @@ export default class Boss extends Phaser.GameObjects.Sprite {
           input.left = false
           input.right = true
           if(this.body.blocked.right && this.body.blocked.down
-            || this.jumping && this.body.blocked.right){
+            || this.prevState.jump && this.body.blocked.right){
             input.jump = true
           }
         } else {
           input.right = false
           input.left = true
           if(this.body.blocked.left && this.body.blocked.down
-            || this.jumping && this.body.blocked.left){
+            || this.prevState.jump && this.body.blocked.left){
             input.jump = true
           }
         }

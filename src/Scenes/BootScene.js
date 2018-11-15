@@ -54,7 +54,7 @@ export default class BootScene extends Phaser.Scene {
       this.load.json('animations', 'assets/data/animations.json')
       this.load.json('dialog', 'assets/data/dialog.json')
       this.load.json('pests', 'assets/data/pests.json')
-      this.load.json('opponents', 'assets/data/opponents.json')
+      // this.load.json('opponents', 'assets/data/opponents.json')
       this.load.json('weapons', 'assets/data/weapons.json')
 
       this.load.bitmapFont('font', 'assets/fonts/manaspace.png', 'assets/fonts/manaspace.fnt')
@@ -71,8 +71,8 @@ export default class BootScene extends Phaser.Scene {
 
       let el = document.getElementsByTagName('canvas')[0];
       // console.log(el);
-      el.style.width = "1440px"
-      el.style.height = "810px"
+      el.style.width = "960px"
+      el.style.height = "540px"
       this.scene.start('TitleScene')
      // this.scene.start('OverworldScene', {town: 'humblock', mapName: 'slobs-room', freshRun: true})
   }

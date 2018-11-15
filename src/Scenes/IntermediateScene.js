@@ -1,20 +1,22 @@
-export default class TitleScene extends Phaser.Scene {
+export default class IntermediateScene extends Phaser.Scene {
   constructor(test) {
-    super({ key: 'TitleScene' })
+    super({ key: 'IntermediateScene' })
 
     // this.state = new GameState
   }
 
   preload(){
-    this.load.image('static-title', 'assets/menu/title.png')
+    // this.load.image('static-title', 'assets/menu/title.png')
     this.load.image('selector', 'assets/menu/selector.png')
   }
 
   create(){
-    this.add.image(240, 80, 'static-title')
+    // this.add.image(240, 80, 'static-title')
+    this.nextStage = this.scene.settings.data.nextStage
+    console.log(this.nextStage)
 
-    this.add.bitmapText(210, 185, 'font', 'New Game')
-    this.add.bitmapText(210, 205, 'font', 'Continue')
+    this.add.bitmapText(210, 185, 'font', 'Next Level')
+    this.add.bitmapText(210, 205, 'font', 'Quit')
 
     this.menuPositions = 2
     this.menuPos = 1
@@ -33,15 +35,17 @@ export default class TitleScene extends Phaser.Scene {
 
     this.cameras.main.fadeIn(2000)
 
-    // alert('new game')
+    // alert('int Scene')
   }
 
   update(){
 
+    console.log(this.startKey.isDown)
+
     if(this.startKey.isDown && !this.prevState.startKey && this.menuPos === 1){
-      this.newGame()
+      this.nextLevel()
       return
-    } else if(this.startKey.isDown && !this.prevState.startKey && this.menuPos === 2){
+    } else if(this.startKey.isDown && this.menuPos === 2){
       this.loadGame()
     }
 
@@ -68,12 +72,13 @@ export default class TitleScene extends Phaser.Scene {
     }
   }
 
-  newGame(){
-    this.scene.start('GameScene', { stage: 'desert' })
+  nextLevel(){
+    console.log(this.scene)
+    this.scene.start('GameScene', { stage: this.nextStage })
   }
 
   loadGame(){
-    console.log("loading game")
+    this.scene.start('TitleScene')
   }
 
 }

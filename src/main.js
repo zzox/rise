@@ -2,8 +2,8 @@ import 'phaser'
 import BootScene from './Scenes/BootScene'
 import TitleScene from './Scenes/TitleScene'
 import GameScene from './Scenes/GameScene'
-// import IntermediateScene from './WorldScenes/IntermediateScene'
-// import PauseMenuScene from './Scenes/PauseMenuScene'
+import IntermediateScene from './Scenes/IntermediateScene'
+// import DeathScene from './Scenes/DeathScene'
 
 const config = {
   type: Phaser.WEBGL,
@@ -22,9 +22,9 @@ const config = {
   scene: [
     BootScene,
     TitleScene,
+    IntermediateScene,
     GameScene
-    // IntroScene
-    // IntermediateScene,
+    // DeathScene
     // PauseMenuScene
   ]
 }

@@ -110,9 +110,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     // console.log(this.x + ' ' + this.y)
 
-    // if (!this.scene){
-    //   return
-    // }
+    if (!this.scene){
+      return
+    }
     //use this?????
 
     if(!this.alive){
