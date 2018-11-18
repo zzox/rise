@@ -7,6 +7,7 @@ export default class BootScene extends Phaser.Scene {
 
   preload()
   {
+    this.resize()
     // console.log("preload")
       // this.load.image('background-clouds', 'assets/images/clouds.png'); // 16-bit later
       // // Tilemap with a lot of objects and tile-properties tricks
@@ -35,19 +36,6 @@ export default class BootScene extends Phaser.Scene {
       //     instances: 4
       //   });
 
-      // let el = document.getElementsByTagName('canvas')[0]
-      // // console.log(el);
-      // el.style.width = el.style.width*2+"px"
-      // el.style.height = el.style.height*2+"px"
-  
-      // this.load.bitmapFont('font', 'assets/fonts/font.png', 'assets/fonts/font.fnt');
-  
-      // Load plugin for animated tiles. This is just a first build of an upcoming plugin.
-      // It's not optimized and lack features. The source code will be released when an
-      // official first version is released.
-      // console.log("before")
-      // this.load.plugin('AnimatedTiles', 'assets/plugins/AnimatedTiles.min.js');
-
       //   console.log("af")
       // this.load.json('worlds', 'assets/data/worlds.json')  
       this.load.json('stages', 'assets/data/stages.json')  
@@ -58,22 +46,29 @@ export default class BootScene extends Phaser.Scene {
       this.load.json('weapons', 'assets/data/weapons.json')
 
       this.load.bitmapFont('font', 'assets/fonts/manaspace.png', 'assets/fonts/manaspace.fnt')
-
   }
   
   create()
   {
-    // console.log("create")
-     // skipping the menu for now, going straight to the game
-      window.addEventListener('resize', function(){
-        console.log('resizing -- more to added here later')
-      })
+    window.addEventListener('resize', () => {
+      this.resize()
+      console.log('resizing')
+    })
 
-      let el = document.getElementsByTagName('canvas')[0];
-      // console.log(el);
-      el.style.width = "960px"
-      el.style.height = "540px"
-      this.scene.start('TitleScene')
-     // this.scene.start('OverworldScene', {town: 'humblock', mapName: 'slobs-room', freshRun: true})
+    this.scene.start('TitleScene')
+  }
+
+  resize () {
+    const w = 480
+    const h = 270
+    const availW = window.screen.width
+    const availH = window.screen.height
+    const maxW = Math.floor(availW / w)
+    const maxH = Math.floor(availH / h)
+    const multi = maxW < maxH ? maxW : maxH
+
+    let canvas = document.getElementsByTagName('canvas')[0]
+    canvas.style.width = `${multi * w}px`
+    canvas.style.height = `${multi * h}px`
   }
 }

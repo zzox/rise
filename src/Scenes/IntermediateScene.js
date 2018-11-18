@@ -1,17 +1,13 @@
 export default class IntermediateScene extends Phaser.Scene {
   constructor(test) {
     super({ key: 'IntermediateScene' })
-
-    // this.state = new GameState
   }
 
   preload(){
-    // this.load.image('static-title', 'assets/menu/title.png')
     this.load.image('selector', 'assets/menu/selector.png')
   }
 
   create(){
-    // this.add.image(240, 80, 'static-title')
     this.nextStage = this.scene.settings.data.nextStage
     console.log(this.nextStage)
 
@@ -34,14 +30,9 @@ export default class IntermediateScene extends Phaser.Scene {
     this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
 
     this.cameras.main.fadeIn(2000)
-
-    // alert('int Scene')
   }
 
   update(){
-
-    console.log(this.startKey.isDown)
-
     if(this.startKey.isDown && !this.prevState.startKey && this.menuPos === 1){
       this.nextLevel()
       return

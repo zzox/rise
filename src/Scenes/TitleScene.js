@@ -1,12 +1,10 @@
 export default class TitleScene extends Phaser.Scene {
   constructor(test) {
     super({ key: 'TitleScene' })
-
-    // this.state = new GameState
   }
 
   preload(){
-    this.load.image('static-title', 'assets/menu/title.png')
+    this.load.image('static-title', 'assets/menu/rise.png')
     this.load.image('selector', 'assets/menu/selector.png')
   }
 
@@ -32,8 +30,6 @@ export default class TitleScene extends Phaser.Scene {
     this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
 
     this.cameras.main.fadeIn(2000)
-
-    // alert('new game')
   }
 
   update(){
