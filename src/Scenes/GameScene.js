@@ -1,8 +1,9 @@
 import Player from '../Player/Player'
 import Pest from '../Enemies/Pest'
-import Text from '../OtherObjects/Text'
 import Bullet from '../GameObjects/Bullet'
 import Boss from '../Enemies/Boss'
+import Text from '../OtherObjects/Text'
+import HUD from '../OtherObjects/HUD'
 
 // import GameState from '../utils/GameState'
 
@@ -180,6 +181,17 @@ export default class GameScene extends Phaser.Scene {
 
     this.goingNext = false
     this.goingNextTime = 1000
+
+    this.deathTimer = 2000
+    this.deathTime = 0
+    this.warn1Time = 1
+    this.warn1Played = false
+    this.warn2Time = 1000
+    this.warn2Played = false
+    this.deathPlayed = false
+
+    this.goingDead = false
+    this.goingDeadTime = 500
   }
 
   create(){
@@ -474,29 +486,30 @@ export default class GameScene extends Phaser.Scene {
     // }
 
     // Temporary HUD border, will be replaced with a nineslice image
-    var rect = new Phaser.Geom.Rectangle(0, 0, 480, 30)
-    var graphics = this.add.graphics({ fillStyle: { color: 0x000000 } })
-    graphics.fillRectShape(rect).setScrollFactor(0, 0)
+    // var rect = new Phaser.Geom.Rectangle(0, 0, 480, 30)
+    // var graphics = this.add.graphics({ fillStyle: { color: 0x000000 } })
+    // graphics.fillRectShape(rect).setScrollFactor(0, 0)
 
-    var rect = new Phaser.Geom.Rectangle(0, 0, 480, 4)
-    var graphics = this.add.graphics({ fillStyle: { color: 0x8B008B } })
-    graphics.fillRectShape(rect).setScrollFactor(0, 0)
+    // var rect = new Phaser.Geom.Rectangle(0, 0, 480, 4)
+    // var graphics = this.add.graphics({ fillStyle: { color: 0x8B008B } })
+    // graphics.fillRectShape(rect).setScrollFactor(0, 0)
 
-    var rect = new Phaser.Geom.Rectangle(0, 26, 480, 4)
-    var graphics = this.add.graphics({ fillStyle: { color: 0x8B008B } })
-    graphics.fillRectShape(rect).setScrollFactor(0, 0)
+    // var rect = new Phaser.Geom.Rectangle(0, 26, 480, 4)
+    // var graphics = this.add.graphics({ fillStyle: { color: 0x8B008B } })
+    // graphics.fillRectShape(rect).setScrollFactor(0, 0)
 
-    var rect = new Phaser.Geom.Rectangle(0, 0, 4, 30)
-    var graphics = this.add.graphics({ fillStyle: { color: 0x8B008B } })
-    graphics.fillRectShape(rect).setScrollFactor(0, 0)
+    // var rect = new Phaser.Geom.Rectangle(0, 0, 4, 30)
+    // var graphics = this.add.graphics({ fillStyle: { color: 0x8B008B } })
+    // graphics.fillRectShape(rect).setScrollFactor(0, 0)
 
-    var rect = new Phaser.Geom.Rectangle(476, 0, 4, 30)
-    var graphics = this.add.graphics({ fillStyle: { color: 0x8B008B } })
-    graphics.fillRectShape(rect).setScrollFactor(0, 0)
+    // var rect = new Phaser.Geom.Rectangle(476, 0, 4, 30)
+    // var graphics = this.add.graphics({ fillStyle: { color: 0x8B008B } })
+    // graphics.fillRectShape(rect).setScrollFactor(0, 0)
 
     // need to implement multiple elements
-    this.HUD = this.add.bitmapText(8, 10, 'font', `H:${this.player.health}                              A:${this.player.ammo}                        $100`)
-    this.HUD.setScrollFactor(0,0)
+    this.HUD = new HUD(this)
+    this.HUD.create()
+
     this.switching = false
     this.scenePause = false
     this.prevState = {}
@@ -558,6 +571,55 @@ export default class GameScene extends Phaser.Scene {
         this.goingNextTime -= delta
       } else {
         this.scene.start('IntermediateScene', { nextStage: this.nextStage })
+      }
+    }
+
+    if(!this.player.alive && !this.goingDead) {
+      this.cameras.main.fadeOut(this.goingDeadTime)
+      this.goingDead = true
+    }
+
+    if (this.goingDead) {
+      if(this.goingDeadTime > 0) {
+        this.goingDeadTime -= delta
+        // console.log(this.goingDeadTime)
+      } else {
+        this.scene.start('DeathScene', { currentStage: this.stage })
+        // alert('going dead')
+      }
+    }
+
+    if(this.player.y > this.cameras.main.scrollY + 270 + 30){
+      console.log(this.deathTime)
+
+      if (this.deathTime < this.deathTimer) {
+        this.deathTime += delta
+
+        if(this.deathTime > this.warn1Time && !this.warn1Played){
+          this.warn1Played = true
+          console.log('warn1')
+          this.sound.playAudioSprite('sfx', 'death-warn', { volume: 0.4 })
+        }
+
+        if(this.deathTime > this.warn2Time && !this.warn2Played){
+          console.log('warn2')
+          this.warn2Played = true
+          this.sound.playAudioSprite('sfx', 'death-warn', { volume: 0.6 })
+        }
+      } else {
+        if (!this.deathPlayed) {
+          this.deathPlayed = true
+          this.sound.playAudioSprite('sfx', 'death', { volume: 0.6 })
+        }
+        this.player.kill()
+      }
+
+    } else {
+      if (this.deathTime !== 0) {
+        this.deathTime = 0
+        this.warn1Played = false
+        this.warn2Played = false
+        this.deathPlayed = false
       }
     }
 
@@ -626,10 +688,6 @@ export default class GameScene extends Phaser.Scene {
 
     // console.log(this.player.y + ' ' + (this.cameras.main.scrollY + 270))
 
-    if(this.player.y > this.cameras.main.scrollY + 270 + 30){
-      console.log('die')
-    }
-
     this.pestGroup.children.entries.map(pest => pest.update(time, delta))
     this.bullets.children.entries.map(bullet => bullet.update(time, delta))
     this.bossGroup.children.entries.map(boss => boss.update(time, delta))
@@ -647,30 +705,35 @@ export default class GameScene extends Phaser.Scene {
 
           item.taken = true
 
+          let data = this.weaponsConfig[item.name]
+
           switch (item.type) {
             case ('ammo'):
               this.player.ammo += this.player.ammoInc
+              this.sound.playAudioSprite('sfx', 'bullet-pickup', { volume: .8 })
               break
             case ('gun'):
               this.player.hasGun = true
-              // this.player.gun = item.name
-              this.player.ammoInc = item.data.ammoInc
-              this.player.firePerSec = item.data.firePerSec
+              this.player.gun.name = item.name
+              this.player.ammoInc = data.ammoInc
+              this.player.firePerSec = data.firePerSec
               this.player.projFrequency = 1000 / this.player.firePerSec
+              this.sound.playAudioSprite('sfx', 'gun-pickup', { volume: .8 })
               break
             case ('melee'):
               this.player.hasMelee = true
               // set the melee weapon with new stats and image, might need to 
               // create a function on melee.js
               console.log('item')
-              console.log(item)
+              console.log(data)
               this.player.meleeWeapon.name = item.name
-              this.player.meleeWeapon.damage = item.data.damage
-              this.player.meleeWeapon.blowback = item.data.blowback
+              this.player.meleeWeapon.damage = data.damage
+              this.player.meleeWeapon.blowback = data.blowback
 
-              this.player.meleeWeapon.swingStart = item.data.swingStart
-              this.player.meleeWeapon.swingLow = item.data.swingLow
-              this.player.meleeWeapon.swingHigh = item.data.swingHigh
+              this.player.meleeWeapon.swingStart = data.swingStart
+              this.player.meleeWeapon.swingLow = data.swingLow
+              this.player.meleeWeapon.swingHigh = data.swingHigh
+              this.sound.playAudioSprite('sfx', 'sword-pickup', { volume: .8 })
               break
           }
         }
@@ -678,7 +741,8 @@ export default class GameScene extends Phaser.Scene {
     })
 
 
-    this.HUD.text = `H:${this.player.health}                              A:${this.player.ammo}                      $100`
+    this.HUD.update()
+    // this.HUD.text = `H:${this.player.health}                              A:${this.player.ammo}                      $100`
 
 
     // if(this.player.x < 8 + this.screenOffset.x){

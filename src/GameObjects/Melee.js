@@ -25,6 +25,7 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 		this.possession = config.possession || 'player'
 
 		this.swingingDir = null
+		this.soundPlayed = false
 	}
 
 	swing(bool){
@@ -40,6 +41,7 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 		// console.log(tile.canCollide)
 		// console.log(weapon.swingHold + ' ' + weapon.swingHigh)
 		if(tile.canCollide && weapon.swingHold > weapon.swingHigh){
+			weapon.scene.sound.playAudioSprite('sfx', 'sword-pickup', { volume: .1 })
 			console.log('canceling swing')
 			weapon.swinging = false
 			weapon.swingHold = 0
@@ -101,6 +103,11 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 			} else if(this.possession === 'opponent') {
 				this.scene.physics.world.overlap(this, this.scene.player, this.hurtPlayer)
 			}
+			if (!this.soundPlayed) {
+				this.soundPlayed = true
+				console.log('sound play')
+				this.scene.sound.playAudioSprite('sfx', 'sword-swing', { volume: .08 })
+			}
 		} else if(this.swingHold > 150){
 			this.visible = true
 			this.body.setSize(15, 4)
@@ -124,6 +131,10 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 			}
 
 			this.scene.physics.world.overlap(this, this.scene.contactLayer, this.cancelSwing)
+
+			if (this.soundPlayed) {
+				this.soundPlayed = false
+			}
 		} 
 	}
 
@@ -178,7 +189,7 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 
 		//cant keep a swing if holding
 		if(!weapon.swingingDir) {
-			weapon.cancelSwing(weapon, {canCollide: true})
+			weapon.cancelSwing(weapon, { canCollide: true })
 		}
 	}
 }

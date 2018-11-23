@@ -53,10 +53,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     let config = this.scene.weaponsConfig[this.weapon]
 
+    this.hasMelee = false
+
     this.meleeWeapon = new Melee({
       scene: this.scene,
       key: 'melee',
-      name: 'aluminumBat',
+      name: '',
       swingStart: config.swingStart,
       swingLow: config.swingLow,
       swingHigh: config.swingHigh,
@@ -81,7 +83,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.tintStep = 0
 
     this.hasGun = false
-    this.gun = 'pistol'
     this.ammoInc = 3
     this.ammo = 0
     this.firePerSec = 1
@@ -93,7 +94,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.gun = new Gun({
       scene: this.scene,
       key: 'gun',
-      name: 'pistol',
+      name: '',
       player: this,
       from: 'player'
     })
@@ -104,6 +105,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     this.wallSlow = 50
     // this.wallSlowing = false
+
+    this.healthIncTime = 2000
+    this.healthIncTimer = 0
   }
 
   update(keys, time, delta) {
@@ -116,7 +120,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
     //use this?????
 
     if(!this.alive){
-      this.scene.scene.start('TitleScene')
+      // this.scene.goingDead = true
+      // this.scene.scene.start('TitleScene', { currentStage: this.scene.stage })
     }
 
     if(this.clearKeyTime < 333){
@@ -124,6 +129,19 @@ export default class Player extends Phaser.GameObjects.Sprite {
       return
     } else {
       // put in key clear here???
+    }
+
+    if (this.health !== 100 && !this.hurt) {
+      if (this.healthIncTimer < this.healthIncTime) {
+        let multi = 1
+        if (this.body.velocity.x === 0 && this.body.velocity.y === 0) {
+          multi = 3
+        }
+        this.healthIncTimer += (delta * multi)
+      } else {
+        this.health++
+        this.healthIncTimer = 0
+      }
     }
 
     // this.scene.gfx.strokeRect(this.x, this.y, this.body.width, this.body.height);
@@ -150,6 +168,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       up: keys.up.timeDown,
       down: keys.down.timeDown,
       jump: keys.jump.timeDown,
+      melee: keys.melee.timeDown,
       shoot: keys.shoot.timeDown,
       dash: keys.dash.timeDown
     }
@@ -239,7 +258,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
 
     //Melee Logic
-    if(input.melee && !this.prevState.melee){
+    if(input.melee && !this.prevState.melee && this.hasMelee){
       this.meleeWeapon.swing(true)
     } 
 
@@ -286,6 +305,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         let dir = this.body.blocked.left ? 1 : -1
 
         this.body.setVelocity(this.jumpVelocity * dir, this.jumpVelocity * -1.1)
+        this.scene.sound.playAudioSprite('sfx', 'jump', { volume: .3 })
       }
     }
 
@@ -317,12 +337,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
       this.dashes++
       this.dashWarming = true
       this.body.allowGravity = false
+      this.scene.sound.playAudioSprite('sfx', 'dash-warm', { volume: .3 })
     }
 
     if(this.dashWarming){
       if(this.dashTime > this.dashTimer || this.prevState.dash && !input.dash){
         console.log('dashing')
         this.dash(this.flipX, this.dashTime, this.dashTimer)
+        this.scene.sound.playAudioSprite('sfx', 'dash', { volume: .3 }) // ???
       } else {
         this.body.setVelocity(0)
         this.dashTime += delta
@@ -430,7 +452,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     // first jump just needs to be on ground
     if(this.body.blocked.down && !this.jumpHold){
       this.body.setVelocityY(-this.jumpVelocity)
-      // this.scene.sound.playAudioSprite('sfx', 'smb_jump-small', {volume: .2})
+      this.scene.sound.playAudioSprite('sfx', 'jump', { volume: .3 })
       this.jumpTimer = 120
       this.jumping = true
       this.jumps++
@@ -443,7 +465,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       this.body.setVelocityY(-this.jumpVelocity / 1.5)
       this.jumpTimer = 120
       this.jumps++
-      // this.scene.sound.playAudioSprite('sfx', 'smb_jump-super', {volume: .2})
+      this.scene.sound.playAudioSprite('sfx', 'jump', { volume: .2 })
       return
     }
 
@@ -469,12 +491,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
       } else {
         player.body.setVelocity(damage * 100 * lrDir, damage * -10)  
       }
-      player.health = player.health - damage
+      player.damage(damage)
       player.hurt = true
-    }
-
-    if (player.health <= 0) {
-      player.die()
     }
   }
 
@@ -503,6 +521,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.health -= damage
     console.log('damagedddddddd')
     if(this.health <= 0) this.kill()
+
+    this.scene.sound.playAudioSprite('sfx', 'player-hurt', { volume: .2 })
   }
 
   kill() {

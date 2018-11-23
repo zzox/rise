@@ -26,8 +26,6 @@ export default class Text {
 	}
 
 	create () {
-		// scene.
-		console.log(this.scene)
 		this.line = this.scene.add.bitmapText(this.position.x, this.position.y, 'font', this.text)
 			.setTint(parseInt(this.color))
 			.setAlpha(0)
@@ -47,7 +45,7 @@ export default class Text {
 			}
 		}
 
-		if(this.line.alpha === 1) {
+		if (this.line.alpha === 1) {
 			this.fadedIn = true
 			this.canFadeOut = true
 		}
@@ -61,14 +59,14 @@ export default class Text {
 			}
 		}
 
-		if(this.scrollPosition > scrollY){
+		if (this.scrollPosition > scrollY){
 			this.alphaStop = false
 		}
 
-		if(scrollY < this.position.y - 300) {
-			this.line = null
-			console.log('text destroyed')
-		}
+		// if(scrollY < this.position.y - 300) {
+		// 	this.line = null
+		// 	console.log('text destroyed')
+		// }
 
 	}
 }

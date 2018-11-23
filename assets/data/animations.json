@@ -177,6 +177,10 @@
     "sheet": "aluminumBat",
     "anims": [
       {
+        "key": "aluminumBat-idle",
+        "frames": {"start": 0, "end": 0}
+      },
+      {
         "key": "aluminumBat-up",
         "frames": {"start": 0, "end": 0}
       },

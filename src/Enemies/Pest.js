@@ -200,5 +200,7 @@ export default class Pest extends Phaser.GameObjects.Sprite {
   damage(damage){
     this.health = this.health - damage
     if(this.health <= 0) this.kill()
+
+    this.scene.sound.playAudioSprite('sfx', 'pest-hurt', { volume: .2 })
   }
 }

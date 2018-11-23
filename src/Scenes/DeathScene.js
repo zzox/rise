@@ -1,6 +1,6 @@
-export default class IntermediateScene extends Phaser.Scene {
+export default class DeathScene extends Phaser.Scene {
   constructor(test) {
-    super({ key: 'IntermediateScene' })
+    super({ key: 'DeathScene' })
   }
 
   preload(){
@@ -8,10 +8,11 @@ export default class IntermediateScene extends Phaser.Scene {
   }
 
   create(){
-    this.nextStage = this.scene.settings.data.nextStage
-    console.log(this.nextStage)
+    this.currentStage = this.scene.settings.data.currentStage
+    console.log(this.currentStage)
 
-    this.add.bitmapText(210, 185, 'font', 'Next Level')
+    this.add.bitmapText(214, 100, 'font', 'You Lost...')
+    this.add.bitmapText(210, 185, 'font', 'Restart Level')
     this.add.bitmapText(210, 205, 'font', 'Quit')
 
     this.menuPositions = 2
@@ -64,8 +65,7 @@ export default class IntermediateScene extends Phaser.Scene {
   }
 
   nextLevel(){
-    console.log(this.scene)
-    this.scene.start('GameScene', { stage: this.nextStage })
+    this.scene.start('GameScene', { stage: this.currentStage })
   }
 
   loadGame(){

@@ -3,7 +3,7 @@ import BootScene from './Scenes/BootScene'
 import TitleScene from './Scenes/TitleScene'
 import GameScene from './Scenes/GameScene'
 import IntermediateScene from './Scenes/IntermediateScene'
-// import DeathScene from './Scenes/DeathScene'
+import DeathScene from './Scenes/DeathScene'
 
 const config = {
   type: Phaser.WEBGL,
@@ -23,14 +23,9 @@ const config = {
     BootScene,
     TitleScene,
     IntermediateScene,
-    GameScene
-    // DeathScene
-    // PauseMenuScene
+    GameScene,
+    DeathScene
   ]
 }
-
-// window.lisen('resize'{
-//   ()
-// })
 
 const game = new Phaser.Game(config)

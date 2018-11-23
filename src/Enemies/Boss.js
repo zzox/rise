@@ -61,7 +61,6 @@ export default class Boss extends Phaser.GameObjects.Sprite {
     // this.swingingDir = ''
 
     this.weapon = 'aluminumBat'
-
     let wepConfig = this.scene.weaponsConfig[this.weapon]
 
     this.meleeWeapon = new Melee({
@@ -149,10 +148,13 @@ export default class Boss extends Phaser.GameObjects.Sprite {
 
     if (!this.alive) {
       // suspicious
+      this.body.setVelocity(0)
+      this.body.setAcceleration(0)
+      this.anims.play(`${this.name}-stand`)
       if(this.tint !== 0x000000) {
         this.scene.bossesNum--
         this.tint = 0x000000
-        this.body.setVelocity(0)
+        this.body.allowGravity = false
       }
       return
     }
@@ -672,10 +674,14 @@ export default class Boss extends Phaser.GameObjects.Sprite {
     this.body.allowGravity = true
   }
 
-  damage(damage){
+  damage (damage) {
     this.health -= damage
     console.log('damagedddddddd')
-    if(this.health <= 0) this.kill()
+    if(this.health <= 0) {
+      this.kill()
+    } else {
+      this.scene.sound.playAudioSprite('sfx', 'player-hurt', { volume: .2 })
+    }
   }
 
   kill() {

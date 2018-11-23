@@ -8,7 +8,6 @@ export default class BootScene extends Phaser.Scene {
   preload()
   {
     this.resize()
-    // console.log("preload")
       // this.load.image('background-clouds', 'assets/images/clouds.png'); // 16-bit later
       // // Tilemap with a lot of objects and tile-properties tricks
 
@@ -29,14 +28,19 @@ export default class BootScene extends Phaser.Scene {
       //   'assets/music/overworld.mp3'
       // ]);
   
-      // this.load.audioSprite('sfx', [
-      //   'assets/audio/sfx.ogg',
-      //   'assets/audio/sfx.mp3'
-      // ], 'assets/audio/sfx.json', {
-      //     instances: 4
-      //   });
+      this.load.audioSprite('sfx', 
+        'assets/audio/rise-sfx.json',
+        [
+          'assets/audio/rise-sfx.mp3',
+          'assets/audio/rise-sfx.ac3',
+          'assets/audio/rise-sfx.m4a',
+          'assets/audio/rise-sfx.ogg',
+        ], 
+        {
+          instances: 4
+        }
+      )
 
-      //   console.log("af")
       // this.load.json('worlds', 'assets/data/worlds.json')  
       this.load.json('stages', 'assets/data/stages.json')  
       this.load.json('animations', 'assets/data/animations.json')
@@ -63,8 +67,10 @@ export default class BootScene extends Phaser.Scene {
     const h = 270
     const availW = window.screen.width
     const availH = window.screen.height
-    const maxW = Math.floor(availW / w)
-    const maxH = Math.floor(availH / h)
+    // - 20 for padding
+    const maxW = Math.floor(availW / (w + 50))
+    const maxH = Math.floor(availH / (h + 50))
+    console.log(maxW + ' ' + maxH + ' ' + availH + ' ' + availW)
     const multi = maxW < maxH ? maxW : maxH
 
     let canvas = document.getElementsByTagName('canvas')[0]

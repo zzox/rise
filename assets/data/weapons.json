@@ -14,5 +14,9 @@
 		"swingHigh": 200,
 		"damage": 65,
 		"blowback": 150
+	},
+	"pistol": {	      
+  	"ammoInc": 3,
+  	"firePerSec": 2
 	}
 }

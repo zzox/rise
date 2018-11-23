@@ -49,6 +49,8 @@ export default class Gun extends Phaser.GameObjects.Sprite {
 				let x = this.player.flipX ? this.x - 8 : this.x + 8
 				let bullet = this.scene.bullets.get()
 				bullet.fire(x, this.y - 1, flipX ? 'right' : 'left', this.from)
+				this.scene.sound.playAudioSprite('sfx', 'gunshot', { volume: .6 })
+				this.scene.sound.playAudioSprite('sfx', 'gunshot2', { volume: .6 })
 				this.shot = true
 			}
 		} else {
