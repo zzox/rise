@@ -43,7 +43,6 @@ export default class GameScene extends Phaser.Scene {
         dash: 'W',
         slide: 'Q'
       }
-      // this.control.jump
     // } else {
     // }
 
@@ -110,6 +109,8 @@ export default class GameScene extends Phaser.Scene {
     //     this.load.spritesheet(item.name, `assets/characters/npc/${item.name}.png`, { frameWidth: 16, frameHeight: 16, spacing: 2, margin: 1 })
     //   })
     // }
+
+    this.load.image(`${this.stage}-background`, `assets/backgrounds/${this.stage}.png`)
 
     this.pests = this.stageConfig.pests
     if(this.pests) {
@@ -213,6 +214,8 @@ export default class GameScene extends Phaser.Scene {
     //   if(this.worldConfig.middleBackground) this.middleBackground = this.bgMap.createDynamicLayer('middleBackground', this.bgTileset, 0 + this.screenOffset.x, 0 + this.hudHeight + this.screenOffset.y).setScrollFactor(.25,.75)
     //   if(this.worldConfig.nearBackground)   this.nearBackground   = this.bgMap.createDynamicLayer('nearBackground', this.bgTileset, 0 + this.screenOffset.x, 0 + this.hudHeight + this.screenOffset.y).setScrollFactor(.375,.875)
     // }
+
+    this.add.image(240, 270, `${this.stage}-background`).setScrollFactor(0, 0.1).setAlpha(0.4)
 
     this.map = this.make.tilemap({
       key: this.stage
@@ -399,11 +402,6 @@ export default class GameScene extends Phaser.Scene {
     if(this.bosses){
         // console.log(this.worldConfig.content)
       this.bosses.map(enemy => {
-        // console.log('enemy')
-        // console.log(enemy)
-        // console.log('enemyConfig')
-        // console.log(this.enemyConfig)
-
         this.bossesNum++
 
         let pos
@@ -554,13 +552,17 @@ export default class GameScene extends Phaser.Scene {
     })
 
     this.switching = false
+
+    this.music = this.sound.playAudioSprite('soundtrack', this.stage, { loop: true })
   }
 
   update(time, delta){
     // switching scene, do not want to run update()
     if (this.switching) return
 
-    if (this.bosses && this.bossesNum === 0 && !this.goingNext) {
+    if ((this.bosses || this.bigBosses) && this.bossesNum === 0 && !this.goingNext) {
+      this.pauseMusic()
+      this.sound.playAudioSprite('soundtrack', 'win', { volume: 0.9 })
       this.cameras.main.fadeOut(1000)
       this.goingNext = true
       // this.scene.pause()
@@ -576,6 +578,8 @@ export default class GameScene extends Phaser.Scene {
 
     if(!this.player.alive && !this.goingDead) {
       this.cameras.main.fadeOut(this.goingDeadTime)
+      this.pauseMusic()
+      this.sound.playAudioSprite('soundtrack', 'lose', { volume: 0.7 })
       this.goingDead = true
     }
 
@@ -883,6 +887,15 @@ export default class GameScene extends Phaser.Scene {
     console.log(exitSquare)
     if(tile && tile.index >= 0){
       this.scene.exitSquare = exitSquare
+    }
+  }
+
+  pauseMusic () {
+    let sounds = this.sound.sounds
+    for(let i = 0; i < sounds.length; i++) {
+      if(sounds[i].key === 'soundtrack') {
+        this.sound.sounds[i].pause()
+      }
     }
   }
 }

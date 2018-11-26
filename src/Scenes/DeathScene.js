@@ -45,12 +45,14 @@ export default class DeathScene extends Phaser.Scene {
       if(this.menuPos === this.menuPositions){
         this.menuPos = this.menuPositions // only for main
       } else {
+        this.sound.playAudioSprite('soundtrack', 'selector', { volume: 0.5 })
         this.menuPos++
       }
     } else if(this.upKey.isDown && this.upKey.isDown !== this.prevState.upKey){
       if(this.menuPos === 1){
         this.menuPos = 1 // only for main
       } else {
+        this.sound.playAudioSprite('soundtrack', 'selector', { volume: 0.5 })
         this.menuPos--
       }
     }

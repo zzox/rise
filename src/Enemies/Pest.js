@@ -82,15 +82,15 @@ export default class Pest extends Phaser.GameObjects.Sprite {
       if(this.killAt === 1000){
         this.body.setVelocityY(-200)
       }
-      this.killAt-=delta;
+      this.killAt -= delta
       if(this.killAt < 0){
-        this.destroy();
+        this.destroy()
       }
 
       this.tintStep = (this.tintStep === 5) ? 0 : this.tintStep + 1
-      this.tint = [0xFFFFFF, 0xFFFFFF, 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000][this.tintStep];
+      this.tint = [0xFFFFFF, 0xFFFFFF, 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000][this.tintStep]
 
-      return;
+      return
     }
 
     if(this.hurt){
@@ -105,7 +105,7 @@ export default class Pest extends Phaser.GameObjects.Sprite {
     if(this.hurt){
       // dont know how this works but it does
       this.tintStep = (this.tintStep === 5) ? 0 : this.tintStep + 1
-      this.tint = [0xFFFFFF, 0xFFFFFF, 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000][this.tintStep];
+      this.tint = [0xFFFFFF, 0xFFFFFF, 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000][this.tintStep]
     } else {
       if(!this.tint !== 0xFFFFFF){
         this.tint = 0xFFFFFF
@@ -122,7 +122,6 @@ export default class Pest extends Phaser.GameObjects.Sprite {
     if(this.decisionTime > this.decisionTimer){
       this.decisionTime = 0
 
-
       if(Math.abs(this.x - this.player.x) < 100 && Math.abs(this.y - this.player.y) < 20 && this.body.blocked.down && Math.random() > .5){
         this.attacking = true
         this.body.setVelocityY(this.attackSpeed * -1.5)
@@ -136,7 +135,13 @@ export default class Pest extends Phaser.GameObjects.Sprite {
           if(Math.random() > .9){
             this.direction = -this.direction
           } else {
-            this.direction = Math.random() * this.speed
+            // first
+            if(this.direction === 0){
+              let dir = Math.random() > 0.5 ? -1 : 1
+              this.direction = Math.random() * this.speed * dir
+            } else {
+              this.direction = Math.random() * this.speed
+            }
           }
         }
       }

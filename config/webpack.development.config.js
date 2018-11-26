@@ -2,8 +2,8 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const { phaser, phaserModule, nodeModules, dist, dev } = require('./paths');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+//   .BundleAnalyzerPlugin;
 
 // https://webpack.js.org/plugins/define-plugin/
 const definePlugin = new webpack.DefinePlugin({
@@ -29,7 +29,7 @@ const browserSyncPlugin = new BrowserSyncPlugin(
 );
 
 // https://www.npmjs.com/package/webpack-bundle-analyzer
-const analyzerPlugin = new BundleAnalyzerPlugin();
+// const analyzerPlugin = new BundleAnalyzerPlugin();
 
 module.exports = (env, options) => {
   return {
@@ -48,7 +48,7 @@ module.exports = (env, options) => {
         chunks: 'all' // separates vendor bundles from main
       }
     },
-    plugins: [definePlugin, htmlPlugin, analyzerPlugin, browserSyncPlugin],
+    plugins: [definePlugin, htmlPlugin, browserSyncPlugin],
     module: {
       rules: [
         { // transpile js using babel
@@ -95,86 +95,3 @@ module.exports = (env, options) => {
     }
   };
 };
-
-
-// const path = require('path')
-// const webpack = require('webpack')
-// const HtmlWebpackPlugin = require('html-webpack-plugin')
-// const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
-// const HtmlWebpackTemplate = require('html-webpack-template')
-
-// // Phaser webpack config
-// const phaserModule = path.join(__dirname, '/node_modules/phaser/')
-// const phaser = path.join(phaserModule, 'src/phaser.js')
-
-// const definePlugin = new webpack.DefinePlugin({
-//     __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
-//     WEBGL_RENDERER: true, // I did this to make webpack work, but I'm not really sure it should always be true
-//     CANVAS_RENDERER: true // I did this to make webpack work, but I'm not really sure it should always be true
-// })
-
-// module.exports = {
-//     entry: {
-//         app: [
-//             'babel-polyfill',
-//             path.resolve(__dirname, 'src/main.js')
-//         ],
-//         vendor: ['phaser']
-//     }, 
-//     devtool: 'cheap-source-map',
-//     output: {
-//         pathinfo: true,
-//         path: path.resolve(__dirname, 'dist'),
-//         publicPath: './dist/',
-//         filename: 'bundle.js'
-//     },
-//     watch: true,
-//     plugins: [
-//         definePlugin,
-//         new webpack.optimize.CommonsChunkPlugin({ name: 'vendor'/* chunkName= */, filename: 'vendor.bundle.js'/* filename= */ }),
-//         new HtmlWebpackPlugin({
-//             filename: './src/index.html',
-//             template: HtmlWebpackTemplate,
-//             chunks: ['vendor', 'app'],
-//             chunksSortMode: 'manual',
-//             minify: {
-//                 removeAttributeQuotes: false,
-//                 collapseWhitespace: false,
-//                 html5: false,
-//                 minifyCSS: false,
-//                 minifyJS: false,
-//                 minifyURLs: false,
-//                 removeComments: false,
-//                 removeEmptyAttributes: false
-//             },
-//             hash: false
-//         }),
-//         new webpack.LoaderOptionsPlugin({
-//           debug: true
-//         }),
-//         new BrowserSyncPlugin({
-//             host: process.env.IP || 'localhost',
-//             port: process.env.PORT || 4040,
-//             server: {
-//                 baseDir: ['./', './build']
-//             }
-//         })
-//     ],
-//     module: {
-//         rules: [
-//             { test: /\.js$/, use: ['babel-loader'], include: path.join(__dirname, 'src') },
-//             { test: /phaser-split\.js$/, use: ['expose-loader?Phaser'] },
-//             { test: [/\.vert$/, /\.frag$/], use: 'raw-loader' }
-//         ]
-//     },
-//     // node: {
-//     //     fs: 'empty',
-//     //     net: 'empty',
-//     //     tls: 'empty'
-//     // },
-//     resolve: {
-//         alias: {
-//             'phaser': phaser,
-//         }
-//     }
-// }

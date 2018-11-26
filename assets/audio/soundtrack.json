@@ -1,0 +1,45 @@
+{
+  "resources": [
+    "soundtrack.ogg",
+    "soundtrack.m4a",
+    "soundtrack.mp3",
+    "soundtrack.ac3"
+  ],
+  "spritemap": {
+    "desert": {
+      "start": 0,
+      "end": 12,
+      "loop": false
+    },
+    "desertForest": {
+      "start": 13,
+      "end": 25,
+      "loop": false
+    },
+    "forest": {
+      "start": 26,
+      "end": 50,
+      "loop": false
+    },
+    "intro": {
+      "start": 51,
+      "end": 123,
+      "loop": false
+    },
+    "lose": {
+      "start": 124,
+      "end": 127,
+      "loop": false
+    },
+    "selector": {
+      "start": 128,
+      "end": 129.5,
+      "loop": false
+    },
+    "win": {
+      "start": 131,
+      "end": 132.5,
+      "loop": false
+    }
+  }
+}

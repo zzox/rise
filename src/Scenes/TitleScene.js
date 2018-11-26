@@ -30,11 +30,14 @@ export default class TitleScene extends Phaser.Scene {
     this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
 
     this.cameras.main.fadeIn(2000)
+
+    this.music = this.sound.playAudioSprite('soundtrack', 'intro', { loop: true })
   }
 
   update(){
 
     if(this.startKey.isDown && !this.prevState.startKey && this.menuPos === 1){
+      this.pauseMusic()
       this.newGame()
       return
     } else if(this.startKey.isDown && !this.prevState.startKey && this.menuPos === 2){
@@ -45,12 +48,14 @@ export default class TitleScene extends Phaser.Scene {
       if(this.menuPos === this.menuPositions){
         this.menuPos = this.menuPositions // only for main
       } else {
+        this.sound.playAudioSprite('soundtrack', 'selector', { volume: 0.5 })
         this.menuPos++
       }
     } else if(this.upKey.isDown && this.upKey.isDown !== this.prevState.upKey){
       if(this.menuPos === 1){
         this.menuPos = 1 // only for main
       } else {
+        this.sound.playAudioSprite('soundtrack', 'selector', { volume: 0.5 })
         this.menuPos--
       }
     }
@@ -65,11 +70,20 @@ export default class TitleScene extends Phaser.Scene {
   }
 
   newGame(){
-    this.scene.start('GameScene', { stage: 'desert' })
+    this.scene.start('GameScene', { stage: 'desertForest' })
   }
 
   loadGame(){
     console.log("loading game")
+  }
+
+  pauseMusic () {
+    let sounds = this.sound.sounds
+    for(let i = 0; i < sounds.length; i++) {
+      if(sounds[i].key === 'soundtrack') {
+        this.sound.sounds[i].pause()
+      }
+    }
   }
 
 }

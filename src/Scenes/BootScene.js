@@ -27,6 +27,19 @@ export default class BootScene extends Phaser.Scene {
       //   'assets/music/overworld.ogg',
       //   'assets/music/overworld.mp3'
       // ]);
+
+      this.load.audioSprite('soundtrack', 
+        'assets/audio/soundtrack.json',
+        [
+          'assets/audio/soundtrack.mp3',
+          'assets/audio/soundtrack.ac3',
+          'assets/audio/soundtrack.m4a',
+          'assets/audio/soundtrack.ogg',
+        ], 
+        {
+          instances: 4
+        }
+      )
   
       this.load.audioSprite('sfx', 
         'assets/audio/rise-sfx.json',

@@ -12,33 +12,48 @@
         "frames": {"start": 6, "end": 6}
       },
       {
-        "key": "jump",
-        "frames": {"start": 3, "end": 3}
+        "key": "jump-down",
+        "frames": {"start": 7, "end": 8},
+        "frameRate": 6
+      },
+      {
+        "key": "jump-up",
+        "frames": {"start": 9, "end": 10},
+        "frameRate": 6
       },
       {
         "key": "slide-vert",
-        "frames": {"start": 7, "end": 7}
+        "frames": {"start": 11, "end": 12},
+        "frameRate": 6
       },
       {
         "key": "swing-up",
-        "frames": {"start": 8, "end": 8}
-      },
-      {
-        "key": "swing-down",
-        "frames": {"start": 9, "end": 9}
-      },
-      {
-        "key": "swing-stand",
-        "frames": {"start": 10, "end": 10}
-      },
-      {
-        "key": "swing-jump",
         "frames": {"start": 13, "end": 13}
       },
       {
+        "key": "swing-down",
+        "frames": {"start": 14, "end": 14}
+      },
+      {
+        "key": "swing-stand",
+        "frames": {"start": 15, "end": 15}
+      },
+      {
+        "key": "swing-jump",
+        "frames": {"start": 18, "end": 18}
+      },
+      {
         "key": "swing-run",
-        "frames": {"start": 10, "end": 15},
+        "frames": {"start": 15, "end": 21},
         "frameRate": 10
+      },
+      {
+        "key": "dash-warm",
+        "frames": {"start": 11, "end": 11}
+      },
+      {
+        "key": "dash",
+        "frames": {"start": 3, "end": 3}
       }
     ]
   },
@@ -80,6 +95,49 @@
       },
       {
         "key": "bigBro-swing-run",
+        "frames": {"start": 10, "end": 15},
+        "frameRate": 10
+      }
+    ]
+  },
+  "littleBro": {
+    "sheet": "littleBro",
+    "anims": [
+      {
+        "key": "littleBro-run",
+        "frames": {"start": 0, "end": 5},
+        "frameRate": 10
+      },
+      {
+        "key": "littleBro-stand",
+        "frames": {"start": 6, "end": 6}
+      },
+      {
+        "key": "littleBro-jump",
+        "frames": {"start": 3, "end": 3}
+      },
+      {
+        "key": "littleBro-slide-vert",
+        "frames": {"start": 7, "end": 7}
+      },
+      {
+        "key": "littleBro-swing-up",
+        "frames": {"start": 8, "end": 8}
+      },
+      {
+        "key": "littleBro-swing-down",
+        "frames": {"start": 9, "end": 9}
+      },
+      {
+        "key": "littleBro-swing-stand",
+        "frames": {"start": 10, "end": 10}
+      },
+      {
+        "key": "littleBro-swing-jump",
+        "frames": {"start": 13, "end": 13}
+      },
+      {
+        "key": "littleBro-swing-run",
         "frames": {"start": 10, "end": 15},
         "frameRate": 10
       }

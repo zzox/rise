@@ -380,7 +380,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
 
     if(!this.body.blocked.down){
-      this.animation = 'jump'
+      if(this.body.velocity.y < 0){
+        this.animation = 'jump-up'
+      } else {
+        this.animation = 'jump-down'
+      }
     }
 
     if(this.meleeWeapon.swingingDir){
@@ -402,6 +406,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
       if (this.body.velocity.x === 0 && this.body.velocity.y === 0) {
         this.animation = 'swing-stand'
       }
+    }
+
+    if (this.dashWarming) {
+      this.animation = 'dash-warm'
+    }
+
+    if (this.dashing) {
+      this.animation = 'dash'
     }
 
     this.anims.play(this.animation, true)
@@ -489,7 +501,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         console.log('setting velocity:' + (damage * lrDir * 100))
         player.body.setVelocityX(damage * lrDir * 100)  
       } else {
-        player.body.setVelocity(damage * 100 * lrDir, damage * -10)  
+        player.body.setVelocity(damage * 100 * lrDir, damage * -5)  
       }
       player.damage(damage)
       player.hurt = true

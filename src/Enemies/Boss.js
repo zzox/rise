@@ -151,8 +151,7 @@ export default class Boss extends Phaser.GameObjects.Sprite {
       this.body.setVelocity(0)
       this.body.setAcceleration(0)
       this.anims.play(`${this.name}-stand`)
-      if(this.tint !== 0x000000) {
-        this.scene.bossesNum--
+      if (this.tint !== 0x000000) {
         this.tint = 0x000000
         this.body.allowGravity = false
       }
@@ -685,6 +684,9 @@ export default class Boss extends Phaser.GameObjects.Sprite {
   }
 
   kill() {
+    if(this.alive) {
+      this.scene.bossesNum--
+    }
     this.alive = false
   }
 
