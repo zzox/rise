@@ -1,52 +1,20 @@
 {
-	"mom": {
-		"firstPass": [
-			"What took you so long?",
-			" ",
-			"You need to go kill some snakes for your cousins. They are trying",
-			"to clear the way to your father's shack.",
-			"I think your fucking weirdo friend is still crashing there.",
-			" ",
-			"...",
-			"...",
-			"Hurry!",
-			" "
-		]
-	},
-	"twinF": {
-		"firstPass": [
-			"Took you so long enough...",
-			" "
-		]
-	},
-	"twinM": {
-		"firstPass": [
-			"We'll give you this aluminum bat.  Those snakes can be gnarly.",
-			"Good luck."
-		]
-	},
-	"sean": {
-		"firstPass": [
-			"Thank God you're here, what's with those snakes?",
-			" ",
-			"I've been stuck here for a few days.",
-			" ",
-			"Sorry. I know your mom hates me and probably doesn't want me here.",
-			" ",
-			"I've been having a look around, and your dad had so much cool shit.",
-			"Did you know all of the stuff he was inventing?  I booted up one",
-			"of his old machines, he was fucking around with time travel!",
-			"I don't know about you, but I wanna try this shit out.",
-			"...",
-			"...",
-			"I think we need something called a \"transformator\" that your dad",
-			"talked about, I know we can get it in cliffley.  You might want to", 
-			"head out through the shortcut through the forest in back.",
-			" ",
-			"...",
-			"...",
-			"Oh.  Here's a gun.",
-			" "
-		]
-	}
+	"desertForest": [
+		"That wasn't so bad was it?  You now have a second jump.",
+		" ",
+		"Be kind to your keys."
+	],
+	"forest": [
+		"Welcome to the forest, you now have a dash.",
+		" ",
+		"Have fun, I know it looks and sounds weird."
+	],
+	"end": [
+		"Thanks to (Github) @photonstorm, @nkholski, @bjorn,",
+		"@piskelapp, @simiancraft and @RonenNess.",
+		" ",
+		"I have 6 more levels in the works.", 
+		"Thank you for playing my game.",
+		"twitter.com/zzoxzzox   github.com/zzox   itch.io/zzox"
+	]
 }

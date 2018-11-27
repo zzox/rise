@@ -231,6 +231,21 @@
       }
     ]
   },
+  "forestGuardian": {
+    "sheet": "forestGuardian",
+    "anims": [
+      {
+        "key": "forestGuardian-moving",
+        "frames": {"start": 0, "end": 3},
+        "frameRate": 5
+      },
+      {
+        "key": "forestGuardian-movingFast",
+        "frames": {"start": 0, "end": 3},
+        "frameRate": 8
+      }
+    ]
+  },
   "aluminumBat": {
     "sheet": "aluminumBat",
     "anims": [

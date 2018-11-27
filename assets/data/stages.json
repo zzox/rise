@@ -197,22 +197,17 @@
         "position": "20x22.5"
       }
     ],
-    "bosses": [{
-      "name": "bigBro",
+    "bigBosses": [{
+      "name": "forestGuardian",
       "level": 1,
-      "position": {"x":400, "y": 232},
+      "position": {"x":240, "y": 100},
       "details": {
-        "speed": 200,
-        "attackSpeed": 150,
-        "stillDamage": 5,
-        "attackDamage": 20,
-        "decisionTime": 500,
-        "jumpVelocity": 200,
-        "maxVelocityX": 125,
-        "health": 100,
-        "hasSword": true,
-        "hasGun": true,
-        "maxJumps": 2
+        "speed": 180,
+        "health": 200,
+        "attackSpeed": 180,
+        "stillDamage": 20,
+        "attackDamage": 25,
+        "decisionTime": 250
       }
     }],
     "text": [
@@ -227,7 +222,7 @@
       {
         "color": "0x000000",
         "text": "Forest Guardian",
-        "position": {"x": 224, "y": 190},
+        "position": {"x": 190, "y": 190},
         "scrollPosition": 100,
         "fadeTime": 50,
         "fadesOut": true
@@ -360,7 +355,7 @@
     "bosses": [{
       "name": "littleBro",
       "level": 1,
-      "position": {"x":200, "y": 232},
+      "position": {"x":40, "y": 232},
       "details": {
         "speed": 200,
         "attackSpeed": 150,
@@ -377,7 +372,7 @@
     }, {
       "name": "littleBro",
       "level": 1,
-      "position": {"x":220, "y": 232},
+      "position": {"x":120, "y": 232},
       "details": {
         "speed": 200,
         "attackSpeed": 150,
@@ -455,6 +450,6 @@
     "nearground": false,
     "bgTileset": false,
     "bgColor": "80ffeb",
-    "nextStage": "forest"
+    "nextStage": "end"
   }
 }

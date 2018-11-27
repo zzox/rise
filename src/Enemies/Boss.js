@@ -167,6 +167,10 @@ export default class Boss extends Phaser.GameObjects.Sprite {
 
     if(!this.activated()) return
 
+    if(this.y > this.scene.cameras.main.scrollY + 282) {
+      this.kill()
+    }
+
 
     this.decisionTime += delta
     if(this.decisionTime > this.decisionTimer || this.decisionTimer < 20){
@@ -187,12 +191,7 @@ export default class Boss extends Phaser.GameObjects.Sprite {
       } else {
         this.state = 'approach'
       }
-
     }
-
-
-
-
 
     let input = {
       left: false,

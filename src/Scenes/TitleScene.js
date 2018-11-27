@@ -35,7 +35,6 @@ export default class TitleScene extends Phaser.Scene {
   }
 
   update(){
-
     if(this.startKey.isDown && !this.prevState.startKey && this.menuPos === 1){
       this.pauseMusic()
       this.newGame()
@@ -70,7 +69,7 @@ export default class TitleScene extends Phaser.Scene {
   }
 
   newGame(){
-    this.scene.start('GameScene', { stage: 'desertForest' })
+    this.scene.start('GameScene', { stage: 'desert' })
   }
 
   loadGame(){

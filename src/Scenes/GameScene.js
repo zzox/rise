@@ -1,7 +1,8 @@
 import Player from '../Player/Player'
-import Pest from '../Enemies/Pest'
 import Bullet from '../GameObjects/Bullet'
+import Pest from '../Enemies/Pest'
 import Boss from '../Enemies/Boss'
+import BigBoss from '../Enemies/BigBoss'
 import Text from '../OtherObjects/Text'
 import HUD from '../OtherObjects/HUD'
 
@@ -134,6 +135,17 @@ export default class GameScene extends Phaser.Scene {
       })
     }
 
+    this.bigBosses = this.stageConfig.bigBosses
+    if(this.bigBosses) {
+      this.bigBosses.map(boss => {
+        if(!this.animsArray.includes(boss.name)){
+                                                                                          // make this come from the boss object
+          this.animsArray.push(boss.name)
+          this.load.spritesheet(boss.name, `assets/characters/bosses/${boss.name}.png`, { frameWidth: 48, frameHeight: 48, spacing: 2, margin: 1 })
+        }
+      })
+    }
+
     // this.opponents = this.gameConfig.content.opponents
     // console.log(this.opponents)
 
@@ -215,7 +227,7 @@ export default class GameScene extends Phaser.Scene {
     //   if(this.worldConfig.nearBackground)   this.nearBackground   = this.bgMap.createDynamicLayer('nearBackground', this.bgTileset, 0 + this.screenOffset.x, 0 + this.hudHeight + this.screenOffset.y).setScrollFactor(.375,.875)
     // }
 
-    this.add.image(240, 270, `${this.stage}-background`).setScrollFactor(0, 0.1).setAlpha(0.4)
+    this.add.image(240, 270, `${this.stage}-background`).setScrollFactor(0, 0.1).setAlpha(0.3)
 
     this.map = this.make.tilemap({
       key: this.stage
@@ -409,6 +421,29 @@ export default class GameScene extends Phaser.Scene {
         console.log(pos)
         // console.log(this.opponentConfig[enemy.name])
         this.bossGroup.add(new Boss({
+          scene: this,
+          key: 'opponent',
+          x: enemy.position.x,
+          y: enemy.position.y,
+          name: enemy.name,
+          details: enemy.details,
+          flipX: flipX
+        })) 
+      })
+      console.log('enemies here')
+      this.physics.add.collider(this.contactLayer, this.bossGroup)
+    }
+
+    if(this.bigBosses){
+        // console.log(this.worldConfig.content)
+      this.bigBosses.map(enemy => {
+        this.bossesNum++
+
+        let pos
+        let flipX = false// = enemy.position.split('x')
+        console.log(pos)
+        // console.log(this.opponentConfig[enemy.name])
+        this.pestGroup.add(new BigBoss({
           scene: this,
           key: 'opponent',
           x: enemy.position.x,

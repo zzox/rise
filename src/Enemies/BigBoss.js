@@ -16,8 +16,8 @@ export default class Pest extends Phaser.GameObjects.Sprite {
     this.attackSpeed = config.details.attackSpeed
     this.direction = 0
     // Standard sprite is 16x16 pixels with a smaller body
-    this.body.setSize(16, 8)
-    this.body.offset.set(8, 12)
+    this.body.setSize(40, 30)
+    this.body.offset.set(-4,10)
     this.anims.play(`${config.name}-moving`)  
     this.health = config.details.health
     this.killAt = 0;
@@ -30,8 +30,9 @@ export default class Pest extends Phaser.GameObjects.Sprite {
     this.attacking = false
 
     this.hurt = false
-    this.hurtTimer = 500
+    this.hurtTimer = 250
     this.hurtTime = 0
+
     this.tintStep = 0
 
     this.decisionTimer = config.details.decisionTime
@@ -42,32 +43,15 @@ export default class Pest extends Phaser.GameObjects.Sprite {
   }
 
   activated(){
-    // Method to check if an enemy is activated, the enemy will stay put
-    // until activated so that starting positions is correct
-    // if(!this.alive){
-    //   if(this.y>240){
-    //     this.kill();
-    //   }
-    //   return false;
-    // }
     if(!this.beenSeen){
-      // check if it's being seen now and if so, activate it
-      // console.log('seen')
-
-                                            //TEMP
-      if(this.y + 24 > this.scene.cameras.main.scrollY){
-        this.beenSeen = true;
-        console.log('seen')
-        // alert('seen')
-        // this.body.velocity.x = this.direction;
+      if(this.y - 8 > this.scene.cameras.main.scrollY){
+        this.beenSeen = true
         this.body.allowGravity = true
-        // this.body.setCollideWorldBounds(true)
-        return true;
+        return true
       }
       return false
     }
     return true // to activate
-    // return false
   }
 
   update (time, delta) {
@@ -76,20 +60,15 @@ export default class Pest extends Phaser.GameObjects.Sprite {
     if(!this.activated()) return
     // this.scene.physics.world.collide(this, this.scene.groundLayer)
     // might need to take this out incase it equals 0 at one point, which it may
-    if(!this.alive){
-      // The killtimer is set, keep the flat Goomba then kill it for good.
-      // console.log(this.body.velocity)
-      if(this.killAt === 1000){
-        this.body.setVelocityY(-200)
+    if (!this.alive) {
+      // suspicious
+      this.body.setVelocity(0)
+      this.body.setAcceleration(0)
+      this.anims.play(`${this.name}-stand`)
+      if (this.tint !== 0x000000) {
+        this.tint = 0x000000
+        this.body.allowGravity = false
       }
-      this.killAt -= delta
-      if(this.killAt < 0){
-        this.destroy()
-      }
-
-      this.tintStep = (this.tintStep === 5) ? 0 : this.tintStep + 1
-      this.tint = [0xFFFFFF, 0xFFFFFF, 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000][this.tintStep]
-
       return
     }
 
@@ -115,16 +94,16 @@ export default class Pest extends Phaser.GameObjects.Sprite {
 
     //change dir at wall, up here because below setVelocity it interferes.
     if(this.body.velocity.x === 0 && this.body.blocked.left || this.body.blocked.right) {
-      this.direction = -this.direction
+      this.speed = -this.speed
     }
 
-    //decision
+    // //decision
     if(this.decisionTime > this.decisionTimer){
       this.decisionTime = 0
 
-      if(Math.abs(this.x - this.player.x) < 100 && Math.abs(this.y - this.player.y) < 20 && this.body.blocked.down && Math.random() > .5){
+      if(Math.abs(this.x - this.player.x) < 160 && (this.y - this.player.y) > -8 && this.body.blocked.down && Math.random() > 0.5){
         this.attacking = true
-        this.body.setVelocityY(this.attackSpeed * -1.5)
+        this.body.setVelocityY(this.attackSpeed * -1)
         if(this.x < this.player.x){
           this.body.setVelocityX(this.attackSpeed)
         } else {
@@ -132,31 +111,19 @@ export default class Pest extends Phaser.GameObjects.Sprite {
         }
       } else {
         if(this.body.blocked.down) {
-          if(Math.random() > .9){
-            this.direction = -this.direction
-          } else {
             // first
-            if(this.direction === 0){
-              let dir = Math.random() > 0.5 ? -1 : 1
-              this.direction = Math.random() * this.speed * dir
-            } else {
-              this.direction = Math.random() * this.speed
+            if(Math.random() > 0.9) {
+              console.log('switch')
+              this.speed = - this.speed
             }
-          }
         }
       }
     } else {
       this.decisionTime += delta
     }
 
-    if(!this.hurt && !this.attacking){
-      this.body.setVelocityX(this.direction)
-    }
-
-    if(this.body.velocity.x < 0){
-      this.flipX = false
-    } else {
-      this.flipX = true
+    if(!this.hurt && !this.attacking && this.body.blocked.down){
+      this.body.setVelocityX(this.speed)
     }
 
     if(this.body.blocked.down && this.body.velocity.y === 0) {
@@ -164,41 +131,17 @@ export default class Pest extends Phaser.GameObjects.Sprite {
     }
 
     if(this.attacking) {
-      this.anims.play(`${this.name}-attacking`, true)
+      this.anims.play(`${this.name}-moving-fast`, true)
     } else {
       this.anims.play(`${this.name}-moving`, true)
     }
 
   }
 
-  // verticalHit(enemy, player){
-  //    // quick check if a collision between the enemy and player is from above.
-  //    if(!player.alive){return false}
-  //    return player.body.velocity.y>=0 && (player.body.y+player.body.height)-enemy.body.y<10;
-  // }
-
-  // hurtplayer(enemy, player){
-  //   // send the enemy to player hurt method (if player got a star this will not end well for the enemy)
-  //   this.scene.player.hurtBy(enemy);
-  // }
-
-  // starKilled(){
-  //   // Killed by a star or hit from below with a block, later on also fire
-  //   if(!this.alive){
-  //     return;
-  //   }
-  //   this.body.velocity.x  = 0;
-  //   this.body.velocity.y = -200;
-  //   this.alive = false;
-  //   this.flipY = true;
-  //   this.scene.sound.playAudioSprite('sfx', 'smb_stomp');
-  //   // this.scene.updateScore(100);
-  // }
-
   kill(){
-    this.killAt = 500
-    this.body.velocity.y = -500
-    this.flipY = true
+    if(this.alive) {
+      this.scene.bossesNum--
+    }
     this.alive = false
   }
 
@@ -206,6 +149,6 @@ export default class Pest extends Phaser.GameObjects.Sprite {
     this.health = this.health - damage
     if(this.health <= 0) this.kill()
 
-    this.scene.sound.playAudioSprite('sfx', 'pest-hurt', { volume: .2 })
+    this.scene.sound.playAudioSprite('sfx', 'big-boss-hurt', { volume: .2 })
   }
 }

@@ -18,7 +18,7 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
 
     //to be dynamic vvvvvv
     this.velocity = 800
-    this.damage = 10
+    this.damage = 15
     this.blowback = 150
 
 

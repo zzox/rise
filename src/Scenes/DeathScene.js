@@ -38,7 +38,7 @@ export default class DeathScene extends Phaser.Scene {
       this.nextLevel()
       return
     } else if(this.startKey.isDown && !this.prevState.startKey && this.menuPos === 2){
-      this.loadGame()
+      this.quitGame()
     }
 
     if(this.downKey.isDown && this.downKey.isDown !== this.prevState.downKey){
@@ -70,8 +70,7 @@ export default class DeathScene extends Phaser.Scene {
     this.scene.start('GameScene', { stage: this.currentStage })
   }
 
-  loadGame(){
+  quitGame(){
     this.scene.start('TitleScene')
   }
-
 }

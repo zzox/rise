@@ -11,10 +11,24 @@ export default class IntermediateScene extends Phaser.Scene {
     this.nextStage = this.scene.settings.data.nextStage
     console.log(this.nextStage)
 
-    this.add.bitmapText(210, 185, 'font', 'Next Level')
-    this.add.bitmapText(210, 205, 'font', 'Quit')
+    if (this.nextStage === 'end') {
+      this.add.bitmapText(210, 185, 'font', 'Quit')
+    } else {
+      this.add.bitmapText(210, 185, 'font', 'Next Level')
+      this.add.bitmapText(210, 205, 'font', 'Quit')
+    }
 
-    this.menuPositions = 2
+    this.dialog = this.sys.cache.json.entries.entries.dialog[this.nextStage]
+
+    for (let i = 0; i < this.dialog.length; i++) {
+      this.add.bitmapText(50, i * 20 + 50, 'font', this.dialog[i])
+    }
+
+    if (this.nextStage === 'end') {
+      this.menuPositions = 1
+    } else {
+      this.menuPositions = 2
+    }
     this.menuPos = 1
 
     this.spr = this.add.sprite(195, 188, 'selector')
@@ -34,10 +48,14 @@ export default class IntermediateScene extends Phaser.Scene {
 
   update(){
     if(this.startKey.isDown && !this.prevState.startKey && this.menuPos === 1){
-      this.nextLevel()
+      if (this.nextStage === 'end') {
+        this.quitGame()
+      } else {
+        this.nextLevel()
+      }
       return
     } else if(this.startKey.isDown && !this.prevState.startKey && this.menuPos === 2){
-      this.loadGame()
+      this.quitGame()
     }
 
     if(this.downKey.isDown && this.downKey.isDown !== this.prevState.downKey){
@@ -70,8 +88,7 @@ export default class IntermediateScene extends Phaser.Scene {
     this.scene.start('GameScene', { stage: this.nextStage })
   }
 
-  loadGame(){
+  quitGame(){
     this.scene.start('TitleScene')
   }
-
 }

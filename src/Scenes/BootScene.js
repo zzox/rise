@@ -78,11 +78,11 @@ export default class BootScene extends Phaser.Scene {
   resize () {
     const w = 480
     const h = 270
-    const availW = window.screen.width
-    const availH = window.screen.height
+    const availW = window.innerWidth
+    const availH = window.innerHeight
     // - 20 for padding
-    const maxW = Math.floor(availW / (w + 50))
-    const maxH = Math.floor(availH / (h + 50))
+    const maxW = Math.floor(availW / w)
+    const maxH = Math.floor(availH / h)
     console.log(maxW + ' ' + maxH + ' ' + availH + ' ' + availW)
     const multi = maxW < maxH ? maxW : maxH
 

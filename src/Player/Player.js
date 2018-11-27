@@ -120,6 +120,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
     //use this?????
 
     if(!this.alive){
+      this.body.setVelocity(0)
+      this.body.setAcceleration(0)
+      this.anims.play('stand')
+      if (this.tint !== 0x000000) {
+        this.tint = 0x000000
+        this.body.allowGravity = false
+      }
+      return
       // this.scene.goingDead = true
       // this.scene.scene.start('TitleScene', { currentStage: this.scene.stage })
     }
