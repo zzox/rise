@@ -4,16 +4,11 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 		config.scene.physics.world.enable(this)
     config.scene.add.existing(this)
 
-    // console.log(config.possession)
-
     this.name = config.name
     this.swinging = false
     this.body.allowGravity = false
 		this.direction = 'left'
 		this.swingHold = 0
-
-		// console.log('config')
-		// console.log(config)
 
 		this.damage = config.damage
 		this.blowback = config.blowback
@@ -38,11 +33,8 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 	}
 
 	cancelSwing(weapon, tile) {
-		// console.log(tile.canCollide)
-		// console.log(weapon.swingHold + ' ' + weapon.swingHigh)
 		if(tile.canCollide && weapon.swingHold > weapon.swingHigh){
 			weapon.scene.sound.playAudioSprite('sfx', 'sword-pickup', { volume: .1 })
-			console.log('canceling swing')
 			weapon.swinging = false
 			weapon.swingHold = 0
 			weapon.visible = false
@@ -105,7 +97,6 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 			}
 			if (!this.soundPlayed) {
 				this.soundPlayed = true
-				console.log('sound play')
 				this.scene.sound.playAudioSprite('sfx', 'sword-swing', { volume: .08 })
 			}
 		} else if(this.swingHold > 150){
@@ -140,15 +131,12 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 
 	hurtEnemy (weapon, enemy) {
 		if(!weapon.active || !weapon.visible) {
-			alert('not active or visible')
 			return
 		}
 		if(enemy.hurt === false && enemy.alive === true){
 			enemy.damage(weapon.damage)
 		}
-		console.log('enemy')
-		console.log(enemy)
-		console.log(weapon.possession)
+
 		enemy.hurt = true
 
 		let dir = weapon.direction === 'left' ? -1 : 1
@@ -174,9 +162,6 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 			player.damage(weapon.damage)
 		}
 
-		console.log('player')
-		console.log(player)
-		console.log(weapon.possession)
 		player.hurt = true
 
 		let dir = weapon.direction === 'left' ? -1 : 1

@@ -207,7 +207,7 @@
         "attackSpeed": 180,
         "stillDamage": 25,
         "attackDamage": 35,
-        "decisionTime": 250
+        "decisionTime": 400
       }
     }],
     "text": [

@@ -12,9 +12,9 @@ export default class TitleScene extends Phaser.Scene {
     this.add.image(240, 80, 'static-title')
 
     this.add.bitmapText(210, 185, 'font', 'New Game')
-    this.add.bitmapText(210, 205, 'font', 'Continue')
+    // this.add.bitmapText(210, 205, 'font', 'Continue')
 
-    this.menuPositions = 2
+    this.menuPositions = 1
     this.menuPos = 1
 
     this.spr = this.add.sprite(195, 188, 'selector')
@@ -70,12 +70,12 @@ export default class TitleScene extends Phaser.Scene {
 
   newGame(){
     this.clearKeys()
-    this.scene.start('GameScene', { stage: 'forest' })
+    this.scene.start('GameScene', { stage: 'desert' })
   }
 
-  loadGame(){
-    console.log("loading game")
-  }
+  // loadGame(){
+  //   console.log("loading game")
+  // }
 
   pauseMusic () {
     let sounds = this.sound.sounds

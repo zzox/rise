@@ -4,18 +4,13 @@ export default class Pest extends Phaser.GameObjects.Sprite {
     config.scene.physics.world.enable(this);
     config.scene.add.existing(this);
     this.alive = true
-    // start still and wait until needed
-                                                //SLOBLEM: setting to true causes weird blips
     this.body.setVelocity(0, 0).setBounce(0, 0)// .setCollideWorldBounds(true)
     this.body.allowGravity = true // needed now?
     this.beenSeen = false
-    // know about player
     this.player = this.scene.player
-    // Base horizontal velocity / direction.
     this.speed = config.details.speed
     this.attackSpeed = config.details.attackSpeed
     this.direction = 0
-    // Standard sprite is 16x16 pixels with a smaller body
     this.body.setSize(40, 30)
     this.body.offset.set(-4,10)
     this.anims.play(`${config.name}-moving`)  
@@ -24,7 +19,6 @@ export default class Pest extends Phaser.GameObjects.Sprite {
     this.type = config.type
     this.stillDamage = config.details.stillDamage
     this.attackDamage = config.details.attackDamage
-
     this.biDirectional = config.details.biDir
 
     this.attacking = false
@@ -51,15 +45,12 @@ export default class Pest extends Phaser.GameObjects.Sprite {
       }
       return false
     }
-    return true // to activate
+    return true
   }
 
   update (time, delta) {
-    // If it's not activated, then just skip the update method (see Enemy.js)\
-    // console.log(this.x + ' ' + this.y)
     if(!this.activated()) return
-    // this.scene.physics.world.collide(this, this.scene.groundLayer)
-    // might need to take this out incase it equals 0 at one point, which it may
+
     if (!this.alive) {
       // suspicious
       this.body.setVelocity(0)
@@ -91,8 +82,6 @@ export default class Pest extends Phaser.GameObjects.Sprite {
       }
     }
 
-
-    //change dir at wall, up here because below setVelocity it interferes.
     if(this.body.velocity.x === 0 && this.body.blocked.left || this.body.blocked.right) {
       this.speed = -this.speed
     }

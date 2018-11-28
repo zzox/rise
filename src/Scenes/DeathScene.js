@@ -9,7 +9,6 @@ export default class DeathScene extends Phaser.Scene {
 
   create(){
     this.currentStage = this.scene.settings.data.currentStage
-    console.log(this.currentStage)
 
     this.add.bitmapText(214, 100, 'font', 'You Lost...')
     this.add.bitmapText(210, 185, 'font', 'Restart Level')

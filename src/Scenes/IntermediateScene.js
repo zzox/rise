@@ -9,7 +9,6 @@ export default class IntermediateScene extends Phaser.Scene {
 
   create(){
     this.nextStage = this.scene.settings.data.nextStage
-    console.log(this.nextStage)
 
     if (this.nextStage === 'end') {
       this.add.bitmapText(210, 185, 'font', 'Quit')

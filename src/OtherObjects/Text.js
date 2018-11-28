@@ -32,8 +32,6 @@ export default class Text {
 	}
 
 	update (delta, scrollY) {
-		// console.log(scrollY)
-
 		if(this.line === null) return
 
 		if (!this.alphaStop && !this.canFadeOut && this.line.alpha < 1){
@@ -62,11 +60,5 @@ export default class Text {
 		if (this.scrollPosition > scrollY){
 			this.alphaStop = false
 		}
-
-		// if(scrollY < this.position.y - 300) {
-		// 	this.line = null
-		// 	console.log('text destroyed')
-		// }
-
 	}
 }

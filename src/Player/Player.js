@@ -16,8 +16,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   create(){
-    // console.log("create Player???")
-    // original val = 125
     this.body.maxVelocity.x = 150
     this.body.maxVelocity.y = 300
     this.acceleration = 800
@@ -34,25 +32,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.body.offset.set(14, 8)
     this.body.setSize(10, 16)
 
-    // this.setDisplaySize(64, 64)
-
     this.anims.play('stand')
-    //this.anims = this.scene.anims
     this.exitDoorTime = 0
-    // this.depth = 1
-    // this.cameras.main.fadeIn(500)
-    // this.play('stand')
     this.clearKeyTime = 0
-    // if(this.scene.worldConfig.groundLayer) this.scene.physics.add.collider(this, this.scene.groundLayer);
     this.alive = true
 
-    // this.swingHold = 0
-    // this.swingingDir = ''
-
     this.weapon = 'aluminumBat'
-
     let config = this.scene.weaponsConfig[this.weapon]
-
     this.hasMelee = false
 
     this.meleeWeapon = new Melee({
@@ -111,13 +97,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   update(keys, time, delta) {
-
-    // console.log(this.x + ' ' + this.y)
-
     if (!this.scene){
       return
     }
-    //use this?????
 
     if(!this.alive){
       this.body.setVelocity(0)
@@ -128,15 +110,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.body.allowGravity = false
       }
       return
-      // this.scene.goingDead = true
-      // this.scene.scene.start('TitleScene', { currentStage: this.scene.stage })
-    }
-
-    if(this.clearKeyTime < 333){
-      this.clearKeyTime += delta
-      return
-    } else {
-      // put in key clear here???
     }
 
     if (this.health !== 100 && !this.hurt) {
@@ -152,12 +125,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
     }
 
-    // this.scene.gfx.strokeRect(this.x, this.y, this.body.width, this.body.height);
-    // this.exitDoorTime += delta
-
-
-    /////////////////////////////////////////////////////////////
-    //Input logic
     let input = {
       left: keys.left.isDown,
       right: keys.right.isDown,
@@ -169,7 +136,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
       dash: keys.dash.isDown
     }
 
-    // holds
     let holds = {
       left: keys.left.timeDown,
       right: keys.right.timeDown,
@@ -181,21 +147,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
       dash: keys.dash.timeDown
     }
 
-    // if(this.scene.exitLayer && input.up && !this.exiting){
-    //   this.exiting = true
-    //   console.log(time)
-    //   this.scene.physics.world.overlap(this, this.scene.exitLayer, this.scene.exitWorld.bind(this.scene))
-    //   // return
-    // }
-    // this.hold.up    && input.up    ? null : this.hold.up = false
-    // this.hold.down  && input.down  ? null : this.hold.down = false
-    // this.hold.left  && input.left  ? null : this.hold.left = false
-    // this.hold.right && input.right ? null : this.hold.right = false
-    // this.hold.jump  && input.jump  ? null : this.hold.jump = false
-    // this.hold.shoot && input.shoot ? null : this.hold.shoot = false
-
-
-    // if both are down, we check to see the newest one pressed
     let vel = 0
 
     if(input.right){
@@ -214,7 +165,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
     }
 
-    // SLOBLEM: hurtTime
     if(this.hurtTime <= 0 || this.hurtTime > 250){
       if ((this.body.blocked.down && !input.left && !input.right) 
         || (this.meleeWeapon.swingHold > 0 && this.meleeWeapon.swingHold < this.meleeWeapon.swingHigh) && this.body.blocked.down) {
@@ -224,17 +174,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
     }
 
-    /////////////////////////////////////////////////////////////
-    //Jump Logic
-    // this.hold.jump  && input.jump  ? null : this.hold.jump = false
-
-    // we subtract from the the jump timer if we are jumping.
     if(this.jumpTimer > 0 && this.jumping){
       this.jumpTimer -= delta
     }
 
-    // we want to know if the player let go of the jump button
-    //  in air for the double jump
     if(this.jumpHold && !input.jump){
       this.jumpHold = false
     }
@@ -255,17 +198,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
       this.jumpTimer = 120
     }
 
-      //for not quick entry AND timing scene changing problem
-    // if(this.scene.worldConfig.exitLayer && input.up && this.exitDoorTime > 1000){
-    //   this.scene.physics.world.overlap(this, this.scene.exitLayer, this.scene.exitWorld.bind(this))
-    // }
-    // }
-
     if(this.meleeWeapon.swinging && this.prevState.flipX !== this.flipX){
       this.meleeWeapon.swing(false)
     }
 
-    //Melee Logic
     if(input.melee && !this.prevState.melee && this.hasMelee && !this.dashing && !this.dashWarming){
       this.meleeWeapon.swing(true)
     } 
@@ -280,27 +216,18 @@ export default class Player extends Phaser.GameObjects.Sprite {
       !this.dashing && !this.dashWarming &&
       !(this.meleeWeapon.swingHold > 0 && this.meleeWeapon.swingHold < this.meleeWeapon.swingHigh || 
         this.meleeWeapon.swinging)) {
-      // console.log(this.scene.projectiles)
-      // let bullet = this.scene.bullets.get()
-      // console.log(bullet)
 
-
-      // TODO
-      // Need to be careful about running out of 50 bullets!
       if(this.ammo > 0){
         this.shooting = true
         
         this.ammo--
         this.lastFired = time + this.projFrequency
 
-      } else {
-        console.log("no more projectiles!! out of ammo")
       }
     }
 
     this.gun.update(this.shooting, delta)
 
-    //wall logic
     if(this.body.blocked.left && !this.body.blocked.down && input.left ||
       this.body.blocked.right && !this.body.blocked.down && input.right) {
       if(this.body.velocity.y > 0) {
@@ -315,7 +242,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
     }
 
-    //hurt logic
     if(this.hurt){
       if(this.hurtTime > this.hurtTimer){
         this.hurt = false
@@ -336,7 +262,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
     }
 
-    //dash logic
     if(input.dash && !this.prevState.dash && 
       this.canDash && !this.dashWarming && 
       !this.dashing && this.dashes < this.maxDashes){
@@ -348,7 +273,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     if(this.dashWarming){
       if(this.dashTime > this.dashTimer || this.prevState.dash && !input.dash){
-        console.log('dashing')
         this.dash(this.flipX, this.dashTime, this.dashTimer)
         this.scene.sound.playAudioSprite('sfx', 'dash', { volume: .3 }) // ???
       } else {
@@ -361,12 +285,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
       this.maxVelocityTimer -= delta
     } 
 
-    //end dash
     if(this.maxVelocityTimer <= 0){
       this.maxVelocityTimer = 0
       this.dashing = false
 
-      //possibly helps with timing?
       if(this.body.maxVelocity.x !== 150){
         this.body.maxVelocity.x = 150
         this.body.allowGravity = true
@@ -378,7 +300,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
       this.dashes = 0
     }
 
-    //Animation Logic
     if(this.body.velocity.x === 0){
       this.animation = 'stand'
     } else {
@@ -431,7 +352,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.prevState.melee = input.melee
     this.prevState.dash = input.dash
     this.prevState.shoot = input.shoot
-    // }
   }
 
   run(dir) {
@@ -464,8 +384,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     if (!this.body.blocked.down && !this.jumping && this.jumps < this.maxJumps) {
       return;
     }
-
-    // console.log(this.jumpTimer)
 
     // first jump just needs to be on ground
     if(this.body.blocked.down && !this.jumpHold){
@@ -546,5 +464,4 @@ export default class Player extends Phaser.GameObjects.Sprite {
   kill() {
     this.alive = false
   }
-
 }

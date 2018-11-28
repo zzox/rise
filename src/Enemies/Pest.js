@@ -4,18 +4,14 @@ export default class Pest extends Phaser.GameObjects.Sprite {
     config.scene.physics.world.enable(this);
     config.scene.add.existing(this);
     this.alive = true
-    // start still and wait until needed
-                                                //SLOBLEM: setting to true causes weird blips
+
     this.body.setVelocity(0, 0).setBounce(0, 0)// .setCollideWorldBounds(true)
     this.body.allowGravity = true // needed now?
     this.beenSeen = false
-    // know about player
     this.player = this.scene.player
-    // Base horizontal velocity / direction.
     this.speed = config.details.speed
     this.attackSpeed = config.details.attackSpeed
     this.direction = 0
-    // Standard sprite is 16x16 pixels with a smaller body
     this.body.setSize(16, 8)
     this.body.offset.set(8, 12)
     this.anims.play(`${config.name}-moving`)  
@@ -42,43 +38,21 @@ export default class Pest extends Phaser.GameObjects.Sprite {
   }
 
   activated(){
-    // Method to check if an enemy is activated, the enemy will stay put
-    // until activated so that starting positions is correct
-    // if(!this.alive){
-    //   if(this.y>240){
-    //     this.kill();
-    //   }
-    //   return false;
-    // }
     if(!this.beenSeen){
-      // check if it's being seen now and if so, activate it
-      // console.log('seen')
-
-                                            //TEMP
       if(this.y + 24 > this.scene.cameras.main.scrollY){
         this.beenSeen = true;
-        console.log('seen')
-        // alert('seen')
-        // this.body.velocity.x = this.direction;
         this.body.allowGravity = true
-        // this.body.setCollideWorldBounds(true)
         return true;
       }
       return false
     }
-    return true // to activate
-    // return false
+    return true
   }
 
   update (time, delta) {
-    // If it's not activated, then just skip the update method (see Enemy.js)\
-    // console.log(this.x + ' ' + this.y)
     if(!this.activated()) return
-    // this.scene.physics.world.collide(this, this.scene.groundLayer)
-    // might need to take this out incase it equals 0 at one point, which it may
+
     if(!this.alive){
-      // The killtimer is set, keep the flat Goomba then kill it for good.
-      // console.log(this.body.velocity)
       if(this.killAt === 1000){
         this.body.setVelocityY(-200)
       }
@@ -103,7 +77,6 @@ export default class Pest extends Phaser.GameObjects.Sprite {
     }
 
     if(this.hurt){
-      // dont know how this works but it does
       this.tintStep = (this.tintStep === 5) ? 0 : this.tintStep + 1
       this.tint = [0xFFFFFF, 0xFFFFFF, 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000][this.tintStep]
     } else {
@@ -112,13 +85,10 @@ export default class Pest extends Phaser.GameObjects.Sprite {
       }
     }
 
-
-    //change dir at wall, up here because below setVelocity it interferes.
     if(this.body.velocity.x === 0 && this.body.blocked.left || this.body.blocked.right) {
       this.direction = -this.direction
     }
 
-    //decision
     if(this.decisionTime > this.decisionTimer){
       this.decisionTime = 0
 
@@ -170,30 +140,6 @@ export default class Pest extends Phaser.GameObjects.Sprite {
     }
 
   }
-
-  // verticalHit(enemy, player){
-  //    // quick check if a collision between the enemy and player is from above.
-  //    if(!player.alive){return false}
-  //    return player.body.velocity.y>=0 && (player.body.y+player.body.height)-enemy.body.y<10;
-  // }
-
-  // hurtplayer(enemy, player){
-  //   // send the enemy to player hurt method (if player got a star this will not end well for the enemy)
-  //   this.scene.player.hurtBy(enemy);
-  // }
-
-  // starKilled(){
-  //   // Killed by a star or hit from below with a block, later on also fire
-  //   if(!this.alive){
-  //     return;
-  //   }
-  //   this.body.velocity.x  = 0;
-  //   this.body.velocity.y = -200;
-  //   this.alive = false;
-  //   this.flipY = true;
-  //   this.scene.sound.playAudioSprite('sfx', 'smb_stomp');
-  //   // this.scene.updateScore(100);
-  // }
 
   kill(){
     this.killAt = 500
