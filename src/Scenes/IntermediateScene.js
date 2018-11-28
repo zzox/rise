@@ -84,11 +84,18 @@ export default class IntermediateScene extends Phaser.Scene {
   }
 
   nextLevel(){
-    console.log(this.scene)
+    this.clearKeys()
     this.scene.start('GameScene', { stage: this.nextStage })
   }
 
   quitGame(){
+    this.clearKeys()
     this.scene.start('TitleScene')
+  }
+
+  clearKeys () {
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.UP)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
   }
 }

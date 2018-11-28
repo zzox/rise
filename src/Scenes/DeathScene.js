@@ -67,10 +67,18 @@ export default class DeathScene extends Phaser.Scene {
   }
 
   nextLevel(){
+    this.clearKeys()
     this.scene.start('GameScene', { stage: this.currentStage })
   }
 
   quitGame(){
+    this.clearKeys()
     this.scene.start('TitleScene')
+  }
+
+  clearKeys () {
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.UP)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
   }
 }

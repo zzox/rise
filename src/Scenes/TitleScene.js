@@ -69,7 +69,8 @@ export default class TitleScene extends Phaser.Scene {
   }
 
   newGame(){
-    this.scene.start('GameScene', { stage: 'desert' })
+    this.clearKeys()
+    this.scene.start('GameScene', { stage: 'forest' })
   }
 
   loadGame(){
@@ -83,6 +84,12 @@ export default class TitleScene extends Phaser.Scene {
         this.sound.sounds[i].pause()
       }
     }
+  }
+
+  clearKeys () {
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.UP)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
   }
 
 }

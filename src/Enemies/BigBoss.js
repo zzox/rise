@@ -101,9 +101,9 @@ export default class Pest extends Phaser.GameObjects.Sprite {
     if(this.decisionTime > this.decisionTimer){
       this.decisionTime = 0
 
-      if(Math.abs(this.x - this.player.x) < 160 && (this.y - this.player.y) > -8 && this.body.blocked.down && Math.random() > 0.5){
+      if(Math.abs(this.x - this.player.x) < 160 && (this.y - this.player.y) > -24 && this.body.blocked.down && Math.random() > 0.5){
         this.attacking = true
-        this.body.setVelocityY(this.attackSpeed * -1)
+        this.body.setVelocityY(this.attackSpeed * -1.5)
         if(this.x < this.player.x){
           this.body.setVelocityX(this.attackSpeed)
         } else {
@@ -112,8 +112,7 @@ export default class Pest extends Phaser.GameObjects.Sprite {
       } else {
         if(this.body.blocked.down) {
             // first
-            if(Math.random() > 0.9) {
-              console.log('switch')
+            if(Math.random() > 0.825) {
               this.speed = - this.speed
             }
         }

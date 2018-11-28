@@ -266,7 +266,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
 
     //Melee Logic
-    if(input.melee && !this.prevState.melee && this.hasMelee){
+    if(input.melee && !this.prevState.melee && this.hasMelee && !this.dashing && !this.dashWarming){
       this.meleeWeapon.swing(true)
     } 
 
@@ -276,7 +276,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     //proj logic
     if(input.shoot && !this.prevState.shoot && this.hasGun && 
-      (time > this.lastFired || this.lastFired === 0) && 
+      (time > this.lastFired || this.lastFired === 0) &&
+      !this.dashing && !this.dashWarming &&
       !(this.meleeWeapon.swingHold > 0 && this.meleeWeapon.swingHold < this.meleeWeapon.swingHigh || 
         this.meleeWeapon.swinging)) {
       // console.log(this.scene.projectiles)
@@ -286,15 +287,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
       // TODO
       // Need to be careful about running out of 50 bullets!
-
       if(this.ammo > 0){
-        // console.log(this.body.x + " " + this.body.y)
         this.shooting = true
         
         this.ammo--
         this.lastFired = time + this.projFrequency
 
-        // this.scene.ammoText.text = 'AMMO ' + this.ammo
       } else {
         console.log("no more projectiles!! out of ammo")
       }

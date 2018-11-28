@@ -205,8 +205,8 @@
         "speed": 180,
         "health": 200,
         "attackSpeed": 180,
-        "stillDamage": 20,
-        "attackDamage": 25,
+        "stillDamage": 25,
+        "attackDamage": 35,
         "decisionTime": 250
       }
     }],
@@ -221,8 +221,24 @@
       },
       {
         "color": "0x000000",
+        "text": "So many snakes...",
+        "position": {"x": 180, "y": 750},
+        "scrollPosition": 750,
+        "fadeTime": 50,
+        "fadesOut": false
+      },
+      {
+        "color": "0x000000",
+        "text": "...and spiders",
+        "position": {"x": 190, "y": 560},
+        "scrollPosition": 500,
+        "fadeTime": 50,
+        "fadesOut": true
+      },
+      {
+        "color": "0x000000",
         "text": "Forest Guardian",
-        "position": {"x": 190, "y": 190},
+        "position": {"x": 180, "y": 190},
         "scrollPosition": 100,
         "fadeTime": 50,
         "fadesOut": true
@@ -388,6 +404,22 @@
       }
     }],
     "text": [
+      {
+        "color": "0x000000",
+        "text": "Use dashButton to dash.  Good luck.",
+        "position": {"x": 240, "y": 1420},
+        "scrollPosition": 1440,
+        "fadeTime": 100,
+        "fadesOut": false
+      },
+      {
+        "color": "0x000000",
+        "text": "jump + jump + dash or jump + dash + jump?",
+        "position": {"x": 150, "y": 1140},
+        "scrollPosition": 1100,
+        "fadeTime": 100,
+        "fadesOut": false
+      },
       {
         "color": "0x000000",
         "text": "Little Bros",

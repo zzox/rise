@@ -6,8 +6,6 @@ import BigBoss from '../Enemies/BigBoss'
 import Text from '../OtherObjects/Text'
 import HUD from '../OtherObjects/HUD'
 
-// import GameState from '../utils/GameState'
-
 export default class GameScene extends Phaser.Scene {
   constructor(config) {
     super({
@@ -205,9 +203,10 @@ export default class GameScene extends Phaser.Scene {
 
     this.goingDead = false
     this.goingDeadTime = 500
+
   }
 
-  create(){
+  create () {
     // if(this.gameConfig.offsetNeeded){
     //   var rect = new Phaser.Geom.Rectangle(this.screenOffset.x, this.screenOffset.y + this.hudHeight, this.worldConfig.size.x, this.worldConfig.size.y);
     //   let colorrr =  this.worldConfig.bgRect
@@ -607,6 +606,7 @@ export default class GameScene extends Phaser.Scene {
       if(this.goingNextTime > 0) {
         this.goingNextTime -= delta
       } else {
+        this.clearKeys()
         this.scene.start('IntermediateScene', { nextStage: this.nextStage })
       }
     }
@@ -623,6 +623,7 @@ export default class GameScene extends Phaser.Scene {
         this.goingDeadTime -= delta
         // console.log(this.goingDeadTime)
       } else {
+        this.clearKeys()
         this.scene.start('DeathScene', { currentStage: this.stage })
         // alert('going dead')
       }
@@ -932,5 +933,18 @@ export default class GameScene extends Phaser.Scene {
         this.sound.sounds[i].pause()
       }
     }
+  }
+
+  clearKeys () {
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.UP)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.LEFT)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.A)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.S)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.D)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.E)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.W)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.Q)
   }
 }

@@ -240,7 +240,7 @@
         "frameRate": 5
       },
       {
-        "key": "forestGuardian-movingFast",
+        "key": "forestGuardian-moving-fast",
         "frames": {"start": 0, "end": 3},
         "frameRate": 8
       }
