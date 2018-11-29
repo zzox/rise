@@ -2,7 +2,7 @@
 
 # rise
 
-A challenging vertical-scrolling combat-platformer.  Made using Phaser 3 for the [itch.io Game Off](https://itch.io/jam/game-off-2018).  Inspired by [Celeste](https://mattmakesgames.itch.io/celeste) and [Towerfall](https://mattmakesgames.itch.io/towerfall), as well as games with vertical scrolling levels like [Rayman](https://en.wikipedia.org/wiki/Rayman_(video_game)). All music, sound effects, sprites, animations and game programming were created by zzox (tyler).  The font is a slightly altered version of [Manaspace Font]() The backgrounds were created by using images in the public domain and converting them to pixel art with Pixelator. All code is convered under the MIT license, while all assests are covered under the CC-BY-Attribution license.
+A challenging vertical-scrolling combat-platformer.  Made using Phaser 3 for the [itch.io Game Off](https://itch.io/jam/game-off-2018).  Inspired by [Celeste](https://mattmakesgames.itch.io/celeste) and [Towerfall](https://mattmakesgames.itch.io/towerfall), as well as games with vertical scrolling levels like [Rayman](https://en.wikipedia.org/wiki/Rayman_(video_game)). All music, sound effects, sprites, animations and game programming were created by zzox (tyler).  The font is a slightly altered version of [Manaspace Font](https://www.fontspace.com/codeman38/manaspace). The backgrounds were created by using images in the public domain and converting them to pixel art with [Pixelator](http://pixelatorapp.com/). All code is convered under the MIT license, while all assests are covered under the CC-BY-Attribution license.
 
 ## Thanks to/built with
 - [@photonstorm](https://github.com/photonstorm) for [Phaser](https://github.com/photonstorm/phaser)
