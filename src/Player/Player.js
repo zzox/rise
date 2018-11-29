@@ -246,7 +246,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
       if(this.hurtTime > this.hurtTimer){
         this.hurt = false
         this.hurtTime = 0
-        console.log('player no longer hurt')
       } else {
         this.hurtTime += delta
       }
@@ -422,7 +421,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     if (enemy.alive) {
       if(player.body.blocked.down && player.body.velocity.y === 0){
-        console.log('setting velocity:' + (damage * lrDir * 100))
         player.body.setVelocityX(damage * lrDir * 100)  
       } else {
         player.body.setVelocity(damage * 100 * lrDir, damage * -5)  
@@ -433,12 +431,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   dash (dir, dashTime, dashTimer) {
-    console.log('trying to dash')
     this.dashTime = 0
     this.dashWarming = false
     dir = dir ? 1 : -1
-
-    console.log(dir * (dashTime / dashTimer) * this.dashVeloctiy)
 
     this.body.maxVelocity.x = 400
     this.maxVelocityTimer = 150
@@ -455,7 +450,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
   damage(damage){
     this.health -= damage
-    console.log('damagedddddddd')
     if(this.health <= 0) this.kill()
 
     this.scene.sound.playAudioSprite('sfx', 'player-hurt', { volume: .2 })

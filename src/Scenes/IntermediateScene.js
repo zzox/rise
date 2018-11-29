@@ -39,8 +39,8 @@ export default class IntermediateScene extends Phaser.Scene {
     }
 
     this.startKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
-    this.upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP)
-    this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
+    this.upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
+    this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
 
     this.cameras.main.fadeIn(2000)
   }
@@ -94,7 +94,7 @@ export default class IntermediateScene extends Phaser.Scene {
 
   clearKeys () {
     this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
-    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.UP)
-    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.W)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.S)
   }
 }

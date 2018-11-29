@@ -1,7 +1,8 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { phaser, phaserModule, nodeModules, dist, ghpages } = require('./paths');
+const { phaser, phaserModule, nodeModules, dist, build, ghpages } = require('./paths');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const definePlugin = new webpack.DefinePlugin({
   WEBGL_RENDERER: true,
@@ -13,7 +14,7 @@ const definePlugin = new webpack.DefinePlugin({
 });
 
 const htmlPlugin = new HtmlWebpackPlugin({
-  template: './src/index.html',
+  template: './index.html',
   filename: './index.html'
 });
 
@@ -22,21 +23,25 @@ const minimizePlugin = new UglifyJsPlugin({
   extractComments: true
 });
 
+const copy = new CopyWebpackPlugin([
+  { from: 'assets', to: 'assets' }
+])
+
 module.exports = (env, options) => {
   return {
     mode: 'production',
     output: {
-      path: env.ghpages ? ghpages : dist,
+      path: build,
       filename: '[name].bundle.js',
       chunkFilename: '[name].bundle.js',
-      publicPath: env.ghpages ? '/create-phaser-app/' : '/'
+      publicPath: '/'
     },
     optimization: {
       splitChunks: {
         chunks: 'all'
       }
     },
-    plugins: [definePlugin, htmlPlugin, minimizePlugin],
+    plugins: [definePlugin, htmlPlugin, minimizePlugin, copy],
     module: {
       rules: [
         {
@@ -47,7 +52,7 @@ module.exports = (env, options) => {
           }
         },
         {
-          test: /\.(png|jpg|gif|ico|svg|pvr|pkm|static|ogg|mp3|wav)$/,
+          test: /\.(png|jpg|gif|ico|svg|pvr|pkm|static|m4a|ac3|ogg|mp3|wav)$/,
           exclude: [nodeModules],
           use: ['file-loader']
         },

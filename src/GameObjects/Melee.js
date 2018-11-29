@@ -155,7 +155,6 @@ export default class Melee extends Phaser.GameObjects.Sprite {
 
 	hurtPlayer (weapon, player) {
 		if(!weapon.active || !weapon.visible) {
-			alert('not active or visible')
 			return
 		}
 		if(player.hurt === false && player.alive === true){

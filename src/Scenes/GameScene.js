@@ -31,12 +31,12 @@ export default class GameScene extends Phaser.Scene {
     // TODO: changeable controls
     // if(this.controls === 'arrows'){
       this.control = {
-        jump: 'A',
-        melee: 'S',
-        shoot: 'D',
-        bomb: 'E',
-        dash: 'W',
-        slide: 'Q'
+        jump: 'J',
+        melee: 'K',
+        shoot: 'L',
+        bomb: 'O',
+        dash: 'I',
+        slide: 'U'
       }
     // } else {
     // }
@@ -294,16 +294,16 @@ export default class GameScene extends Phaser.Scene {
     } 
 
     this.keys = {
-      up: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
-      left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
-      right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
-      down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
-      jump: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
-      melee: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
-      shoot: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
-      bomb: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E),
-      dash: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
-      slide: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q)
+      up: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+      left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+      right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+      down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+      jump: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J),
+      melee: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.K),
+      shoot: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L),
+      bomb: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O),
+      dash: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I),
+      slide: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J)
     }
 
     this.HUD = new HUD(this)
@@ -485,15 +485,15 @@ export default class GameScene extends Phaser.Scene {
   }
 
   clearKeys () {
-    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.UP)
-    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.LEFT)
-    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
-    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
-    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.A)
-    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.S)
-    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.D)
-    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.E)
     this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.W)
-    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.Q)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.A)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.D)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.S)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.J)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.K)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.L)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.O)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.I)
+    this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.U)
   }
 }
