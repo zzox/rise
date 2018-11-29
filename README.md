@@ -1,4 +1,4 @@
-![Title](/assets/riseTitle.png)
+![Title](/assets/readme/riseTitle.png)
 
 # rise
 
@@ -14,6 +14,6 @@ A challenging vertical-scrolling combat-platformer.  Made using Phaser 3 for the
 - [Pixelator](http://pixelatorapp.com/)
 - [codeman38](http://www.zone38.net/) for [Manaspace font](https://www.fontspace.com/codeman38/manaspace)
 
-![one](/assets/rise1.png)
-![two](/assets/rise2.png)
-![three](/assets/rise3.png)
+![one](/assets/readme/rise1.png)
+![two](/assets/readme/rise2.png)
+![three](/assets/readme/rise3.png)
